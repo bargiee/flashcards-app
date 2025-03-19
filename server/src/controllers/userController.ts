@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import { dummyUsers, User } from '../models/userModel';
 
-const getAllUsers = (req: Request, res: Response) => {
+export const getAllUsers = (req: Request, res: Response) => {
     return res.status(200).json(dummyUsers);
 };
 
-const getUserById = (req: Request, res: Response) => {
+export const getUserById = (req: Request, res: Response) => {
     const userId = Number(req.params.id);
     const user = dummyUsers.find((u) => u.id === userId);
 
@@ -16,7 +16,7 @@ const getUserById = (req: Request, res: Response) => {
     return res.status(200).json(user);
 };
 
-const createUser = (req: Request, res: Response) => {
+export const createUser = (req: Request, res: Response) => {
     const { username, email } = req.body;
 
     if (!username || !email) {
@@ -30,7 +30,7 @@ const createUser = (req: Request, res: Response) => {
     return res.status(201).json(newUser);
 };
 
-const updateUser = (req: Request, res: Response) => {
+export const updateUser = (req: Request, res: Response) => {
     const userId = Number(req.params.id);
     const { username, email } = req.body;
 
