@@ -1,25 +1,25 @@
 import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
+import routes from './routes';
 
 dotenv.config();
+
 const app = express();
 
 const corsOptions = {
     origin: ['http://localhost:5173'],
 };
 
-app.use(cors(corsOptions));
+// Middleware
+app.use(cors({ origin: ['http://localhost:5173'] }));
+app.use(express.json());
 
-app.get('/api', (req, res) => {
-    res.json({ fruits: ['apple', 'orange', 'banana'] });
-});
+//Router
+app.use('/api', routes);
 
-app.get('/api/flashcards', (req, res) => {
-    res.json([
-        { id: 2, front: 'Dog', back: 'Pies' },
-        { id: 3, front: 'Cat', back: 'Kot' },
-    ]);
+app.use((req: Request, res: Response) => {
+    res.status(404).json({ message: 'Endpoint not found' });
 });
 
 const PORT = process.env.PORT || 8080;
