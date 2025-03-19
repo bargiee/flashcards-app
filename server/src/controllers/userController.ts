@@ -29,3 +29,33 @@ const createUser = (req: Request, res: Response) => {
     dummyUsers.push(newUser);
     return res.status(201).json(newUser);
 };
+
+const updateUser = (req: Request, res: Response) => {
+    const userId = Number(req.params.id);
+    const { username, email } = req.body;
+
+    const index = dummyUsers.findIndex((u) => u.id === userId);
+    if (index === -1) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+
+    dummyUsers[index] = {
+        ...dummyUsers[index],
+        username: username ?? dummyUsers[index].username,
+        email: email ?? dummyUsers[index].email,
+    };
+
+    return res.status(200).json(dummyUsers[index]);
+};
+
+export const deleteUser = (req: Request, res: Response) => {
+    const userId = Number(req.params.id);
+    const index = dummyUsers.findIndex((u) => u.id === userId);
+
+    if (index === -1) {
+        return res.status(404).json({ message: 'User not found' });
+    }
+
+    dummyUsers.splice(index, 1);
+    return res.status(200).json({ message: `User with id ${userId} deleted` });
+};
