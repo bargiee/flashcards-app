@@ -1,68 +1,106 @@
 import { Request, Response } from 'express';
-import { Flashcard, dummyFlashcards } from '../models/flashcardModel';
+import prisma from '../config/prismaClient';
 
-export const getAllFlashcards = (req: Request, res: Response) => {
-    return res.status(200).json(dummyFlashcards);
+// GET /api/flashcards
+export const getAllFlashcards = async (req: Request, res: Response) => {
+    try {
+        const flashcards = await prisma.flashcard.findMany();
+        return res.status(200).json(flashcards);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Error getting flashcards' });
+    }
 };
 
-export const getFlashcardById = (req: Request, res: Response) => {
+// GET /api/flashcards/:id
+export const getFlashcardById = async (req: Request, res: Response) => {
     const flashcardId = Number(req.params.id);
-    const flashcard = dummyFlashcards.find((f) => f.id === flashcardId);
+    try {
+        const flashcard = await prisma.flashcard.findUnique({
+            where: { id: flashcardId },
+        });
 
-    if (!flashcard) {
-        return res.status(404).json({ message: 'Flashcard not found' });
+        if (!flashcard) {
+            return res.status(404).json({ message: 'Flashcard not found' });
+        }
+
+        return res.status(200).json(flashcard);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Error fetching flashcard' });
     }
-
-    return res.status(200).json(flashcard);
 };
 
-export const createFlashcard = (req: Request, res: Response) => {
-    const { deckId, front, back } = req.body;
+// POST /api/flashcards
+export const createFlashcard = async (req: Request, res: Response) => {
+    const { deckId, term, definition } = req.body;
 
-    if (!deckId || !front || !back) {
-        return res.status(400).json({ message: 'deckId, front, and back are required' });
+    if (!deckId || !term || !definition) {
+        return res.status(400).json({ message: 'deckId, term and definition are required' });
     }
 
-    const newId = dummyFlashcards.length > 0 ? dummyFlashcards[dummyFlashcards.length - 1].id + 1 : 1;
+    try {
+        const newFlashcard = await prisma.flashcard.create({
+            data: {
+                deckId: Number(deckId),
+                term,
+                definition,
+            },
+        });
 
-    const newFlashcard: Flashcard = {
-        id: newId,
-        deckId: Number(deckId),
-        front,
-        back,
-    };
-
-    dummyFlashcards.push(newFlashcard);
-    return res.status(201).json(newFlashcard);
+        return res.status(201).json(newFlashcard);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Error creating flashcard' });
+    }
 };
 
-export const updateFlashcard = (req: Request, res: Response) => {
+// PUT /api/flashcards/:id
+export const updateFlashcard = async (req: Request, res: Response) => {
     const flashcardId = Number(req.params.id);
-    const { front, back, deckId } = req.body;
+    const { term, definition, deckId } = req.body;
 
-    const index = dummyFlashcards.findIndex((f) => f.id === flashcardId);
-    if (index === -1) {
-        return res.status(404).json({ message: 'Flashcard not found' });
+    try {
+        const existing = await prisma.flashcard.findUnique({
+            where: { id: flashcardId },
+        });
+
+        if (!existing) {
+            return res.status(404).json({ message: 'Flashcard not found' });
+        }
+
+        const updated = await prisma.flashcard.update({
+            where: { id: flashcardId },
+            data: {
+                term: term ?? existing.term,
+                definition: definition ?? existing.definition,
+                deckId: deckId ?? existing.deckId,
+            },
+        });
+
+        return res.status(200).json(updated);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Error updating flashcard' });
     }
-
-    dummyFlashcards[index] = {
-        ...dummyFlashcards[index],
-        front: front ?? dummyFlashcards[index].front,
-        back: back ?? dummyFlashcards[index].back,
-        deckId: deckId ?? dummyFlashcards[index].deckId,
-    };
-
-    return res.status(200).json(dummyFlashcards[index]);
 };
 
-export const deleteFlashcard = (req: Request, res: Response) => {
+// DELETE /api/flashcards/:id
+export const deleteFlashcard = async (req: Request, res: Response) => {
     const flashcardId = Number(req.params.id);
-    const index = dummyFlashcards.findIndex((f) => f.id === flashcardId);
 
-    if (index === -1) {
-        return res.status(404).json({ message: 'Flashcard not found' });
+    try {
+        await prisma.flashcard.delete({
+            where: { id: flashcardId },
+        });
+
+        return res.status(200).json({ message: `Flashcard with id ${flashcardId} deleted` });
+    } catch (error: any) {
+        if (error.code === 'P2025') {
+            return res.status(404).json({ message: 'Flashcard not found' });
+        }
+
+        console.error(error);
+        return res.status(500).json({ message: 'Error deleting flashcard' });
     }
-
-    dummyFlashcards.splice(index, 1);
-    return res.status(200).json({ message: `Flashcard with id ${flashcardId} deleted` });
 };
