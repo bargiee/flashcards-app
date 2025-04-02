@@ -1,5 +1,11 @@
 import { Router } from 'express';
-import { getAllFlashcards, getFlashcardById, createFlashcard, updateFlashcard, deleteFlashcard } from '../controllers/flashcardController';
+import {
+    getAllFlashcards,
+    getFlashcardById,
+    createFlashcard,
+    updateFlashcard,
+    deleteFlashcard,
+} from '../controllers/flashcardController';
 
 const router = Router();
 
