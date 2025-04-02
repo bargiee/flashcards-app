@@ -1,5 +1,9 @@
 import { Router } from 'express';
-import { getFavoriteDecksByUser, addFavoriteDeck, removeFavoriteDeck } from '../controllers/favoriteDeckController';
+import {
+    getFavoriteDecksByUser,
+    addFavoriteDeck,
+    removeFavoriteDeck,
+} from '../controllers/favoriteDeckController';
 
 const router = Router();
 
