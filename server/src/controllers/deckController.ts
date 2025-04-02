@@ -100,3 +100,23 @@ export const deleteDeck = async (req: Request, res: Response) => {
         return res.status(500).json({ message: 'Error deleting deck' });
     }
 };
+
+// GET /api/decks/:id/flashcards
+export const getFlashcardsForDeck = async (req: Request, res: Response) => {
+    const deckId = Number(req.params.id);
+
+    try {
+        const flashcards = await prisma.flashcard.findMany({
+            where: { deckId },
+        });
+
+        if (!flashcards || flashcards.length === 0) {
+            return res.status(404).json({ message: 'No flashcards found for this deck' });
+        }
+
+        return res.status(200).json(flashcards);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Error fetching flashcards for deck' });
+    }
+};
