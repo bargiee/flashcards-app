@@ -15,6 +15,6 @@ router.get('/:id', getDeckById);
 router.post('/', createDeck);
 router.put('/:id', updateDeck);
 router.delete('/:id', deleteDeck);
-router.get(':id/flashcards', getFlashcardsForDeck);
+router.get('/:id/flashcards', getFlashcardsForDeck);
 
 export default router;
