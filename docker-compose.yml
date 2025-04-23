@@ -14,10 +14,10 @@ services:
 
     backend:
         build:
-            context: ./server
+            context: ./backend
             dockerfile: Dockerfile
         volumes:
-            - ./server:/app
+            - ./backend:/app
             - /app/node_modules # zapobiega nadpisaniu node_modules lokalnym pustym folderem
         ports:
             - '8080:8080'
