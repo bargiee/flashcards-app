@@ -6,7 +6,7 @@ import { FaRegClock, FaChartLine, FaLaptop } from 'react-icons/fa';
 export default function StartPage() {
     return (
         <main className="min-h-screen flex flex-col">
-            <header className="flex items-center justify-between py-6 px-8">
+            <header className="flex items-center justify-between py-4 px-8">
                 <Logo className="h-10" />
                 <nav className="flex gap-4 font-barlow">
                     <Link
