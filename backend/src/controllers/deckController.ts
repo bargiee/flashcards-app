@@ -4,7 +4,16 @@ import prisma from '../config/prismaClient';
 // GET /api/decks
 export const getAllDecks = async (req: Request, res: Response) => {
     try {
-        const decks = await prisma.deck.findMany();
+        const decks = await prisma.deck.findMany({
+            include: {
+                flashcards: {
+                    select: { id: true },
+                },
+            },
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
         return res.status(200).json(decks);
     } catch (error) {
         console.error(error);
