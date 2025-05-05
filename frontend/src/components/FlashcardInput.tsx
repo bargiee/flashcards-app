@@ -13,7 +13,7 @@ const FlashcardInput = ({ index, term, definition, onChange, onDelete }: Props) 
         <div className="border p-6 rounded-xl mb-4 shadow-sm">
             <div className="flex justify-between items-center mb-4">
                 <span className="font-bold">{index + 1}</span>
-                <button onClick={onDelete} className="text-gray-600 hover:text-red-500">
+                <button onClick={onDelete} className="text-gray-600 hover:text-red-400">
                     <FaTrash />
                 </button>
             </div>
