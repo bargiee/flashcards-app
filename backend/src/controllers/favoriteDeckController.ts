@@ -3,88 +3,62 @@ import prisma from '../config/prismaClient';
 
 // GET /api/favorite-decks/:userId
 export const getFavoriteDecksByUser = async (req: Request, res: Response) => {
-    const userId = Number(req.params.userId);
-
+    const userId = (req.user as any).id;
     try {
-        const favorites = await prisma.favoriteDeck.findMany({
+        const favs = await prisma.favoriteDeck.findMany({
             where: { userId },
-            include: { deck: true },
+            include: { deck: { include: { flashcards: { select: { id: true } } } } },
         });
-
-        if (favorites.length === 0) {
-            return res.status(404).json({ message: 'No favorite decks found for this user' });
-        }
-
-        return res.status(200).json(favorites);
+        return res.status(200).json(favs);
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Error fetching favorite decks' });
+        return res.status(500).json({ message: 'Error fetching favorites' });
     }
 };
 
 // POST /api/favorite-decks
 export const addFavoriteDeck = async (req: Request, res: Response) => {
-    const { userId, deckId } = req.body;
-
-    if (!userId || !deckId) {
-        return res.status(400).json({ message: 'userId and deckId are required' });
+    const userId = (req.user as any).id;
+    const { deckId } = req.body;
+    if (!deckId) {
+        return res.status(400).json({ message: 'deckId is required' });
     }
 
     try {
         const existing = await prisma.favoriteDeck.findUnique({
-            where: {
-                userId_deckId: {
-                    userId: Number(userId),
-                    deckId: Number(deckId),
-                },
-            },
+            where: { userId_deckId: { userId, deckId: Number(deckId) } },
         });
-
         if (existing) {
-            return res.status(409).json({ message: 'Deck is already in favorites' });
+            return res.status(409).json({ message: 'Already in favorites' });
         }
-
-        const newFavorite = await prisma.favoriteDeck.create({
-            data: {
-                userId: Number(userId),
-                deckId: Number(deckId),
-            },
+        const fav = await prisma.favoriteDeck.create({
+            data: { userId, deckId: Number(deckId) },
         });
-
-        return res.status(201).json(newFavorite);
+        return res.status(201).json(fav);
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Error adding favorite deck' });
+        return res.status(500).json({ message: 'Error adding favorite' });
     }
 };
 
 // DELETE /api/favorite-decks (userId + deckId in body)
 export const removeFavoriteDeck = async (req: Request, res: Response) => {
-    const { userId, deckId } = req.body;
-
-    if (!userId || !deckId) {
-        return res.status(400).json({ message: 'userId and deckId are required' });
+    const userId = (req.user as any).id;
+    const { deckId } = req.body;
+    if (!deckId) {
+        return res.status(400).json({ message: 'deckId is required' });
     }
 
     try {
         await prisma.favoriteDeck.delete({
-            where: {
-                userId_deckId: {
-                    userId: Number(userId),
-                    deckId: Number(deckId),
-                },
-            },
+            where: { userId_deckId: { userId, deckId: Number(deckId) } },
         });
-
-        return res
-            .status(200)
-            .json({ message: `Deck ${deckId} removed from favorites for user ${userId}` });
-    } catch (error: any) {
-        if (error.code === 'P2025') {
+        return res.status(200).json({ message: 'Removed from favorites' });
+    } catch (e: any) {
+        if (e.code === 'P2025') {
             return res.status(404).json({ message: 'Favorite not found' });
         }
-
-        console.error(error);
-        return res.status(500).json({ message: 'Error removing favorite deck' });
+        console.error(e);
+        return res.status(500).json({ message: 'Error removing favorite' });
     }
 };

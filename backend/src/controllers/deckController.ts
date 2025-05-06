@@ -3,16 +3,12 @@ import prisma from '../config/prismaClient';
 
 // GET /api/decks
 export const getAllDecks = async (req: Request, res: Response) => {
+    const userId = (req.user as any).id;
     try {
         const decks = await prisma.deck.findMany({
-            include: {
-                flashcards: {
-                    select: { id: true },
-                },
-            },
-            orderBy: {
-                createdAt: 'desc',
-            },
+            where: { userId },
+            include: { flashcards: { select: { id: true } } },
+            orderBy: { createdAt: 'desc' },
         });
         return res.status(200).json(decks);
     } catch (error) {
@@ -23,16 +19,17 @@ export const getAllDecks = async (req: Request, res: Response) => {
 
 // GET /api/decks/:id
 export const getDeckById = async (req: Request, res: Response) => {
+    const userId = (req.user as any).id;
     const deckId = Number(req.params.id);
-    try {
-        const deck = await prisma.deck.findUnique({
-            where: { id: deckId },
-        });
 
+    try {
+        const deck = await prisma.deck.findFirst({
+            where: { id: deckId, userId },
+            include: { flashcards: { select: { id: true } } },
+        });
         if (!deck) {
             return res.status(404).json({ message: 'Deck not found' });
         }
-
         return res.status(200).json(deck);
     } catch (error) {
         console.error(error);
@@ -42,21 +39,16 @@ export const getDeckById = async (req: Request, res: Response) => {
 
 // POST /api/decks
 export const createDeck = async (req: Request, res: Response) => {
-    const { userId, name, description } = req.body;
-
-    if (!userId || !name) {
-        return res.status(400).json({ message: 'userId and name are required' });
+    const userId = (req.user as any).id;
+    const { name, description } = req.body;
+    if (!name) {
+        return res.status(400).json({ message: 'Name is required' });
     }
 
     try {
         const newDeck = await prisma.deck.create({
-            data: {
-                userId: Number(userId),
-                name,
-                description,
-            },
+            data: { userId, name, description },
         });
-
         return res.status(201).json(newDeck);
     } catch (error) {
         console.error(error);
@@ -66,25 +58,23 @@ export const createDeck = async (req: Request, res: Response) => {
 
 // PUT /api/decks/:id
 export const updateDeck = async (req: Request, res: Response) => {
+    const userId = (req.user as any).id;
     const deckId = Number(req.params.id);
     const { name, description } = req.body;
 
     try {
-        const existingDeck = await prisma.deck.findUnique({ where: { id: deckId } });
-
-        if (!existingDeck) {
+        const existing = await prisma.deck.findFirst({ where: { id: deckId, userId } });
+        if (!existing) {
             return res.status(404).json({ message: 'Deck not found' });
         }
-
-        const updatedDeck = await prisma.deck.update({
+        const updated = await prisma.deck.update({
             where: { id: deckId },
             data: {
-                name: name ?? existingDeck.name,
-                description: description ?? existingDeck.description,
+                name: name ?? existing.name,
+                description: description ?? existing.description,
             },
         });
-
-        return res.status(200).json(updatedDeck);
+        return res.status(200).json(updated);
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: 'Error updating deck' });
@@ -93,17 +83,16 @@ export const updateDeck = async (req: Request, res: Response) => {
 
 // DELETE /api/decks/:id
 export const deleteDeck = async (req: Request, res: Response) => {
+    const userId = (req.user as any).id;
     const deckId = Number(req.params.id);
 
     try {
-        const existingDeck = await prisma.deck.findUnique({ where: { id: deckId } });
-
-        if (!existingDeck) {
+        const existing = await prisma.deck.findFirst({ where: { id: deckId, userId } });
+        if (!existing) {
             return res.status(404).json({ message: 'Deck not found' });
         }
-
         await prisma.deck.delete({ where: { id: deckId } });
-        return res.status(200).json({ message: `Deck with id ${deckId} deleted` });
+        return res.status(200).json({ message: `Deck ${deckId} deleted` });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: 'Error deleting deck' });
@@ -112,20 +101,18 @@ export const deleteDeck = async (req: Request, res: Response) => {
 
 // GET /api/decks/:id/flashcards
 export const getFlashcardsForDeck = async (req: Request, res: Response) => {
+    const userId = (req.user as any).id;
     const deckId = Number(req.params.id);
 
     try {
-        const flashcards = await prisma.flashcard.findMany({
-            where: { deckId },
-        });
-
-        if (!flashcards || flashcards.length === 0) {
-            return res.status(404).json({ message: 'No flashcards found for this deck' });
+        const deck = await prisma.deck.findFirst({ where: { id: deckId, userId } });
+        if (!deck) {
+            return res.status(404).json({ message: 'Deck not found' });
         }
-
+        const flashcards = await prisma.flashcard.findMany({ where: { deckId } });
         return res.status(200).json(flashcards);
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Error fetching flashcards for deck' });
+        return res.status(500).json({ message: 'Error fetching flashcards' });
     }
 };
