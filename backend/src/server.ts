@@ -1,26 +1,28 @@
-import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
+import dotenv from 'dotenv';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
+import passport from './config/passport';
 import routes from './routes';
 
 dotenv.config();
 
 const app = express();
 
-const corsOptions = {
-    origin: ['http://localhost:5173'],
-};
+app.use(
+    cors({
+        origin: 'http://localhost:5173',
+        credentials: true,
+    })
+);
 
-// Middleware
-app.use(cors({ origin: ['http://localhost:5173'] }));
 app.use(express.json());
+app.use(cookieParser());
+app.use(passport.initialize());
 
-//Router
 app.use('/api', routes);
 
-app.use((req: Request, res: Response) => {
-    res.status(404).json({ message: 'Endpoint not found' });
-});
+app.use((_req, res) => res.status(404).json({ message: 'Not found' }));
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
