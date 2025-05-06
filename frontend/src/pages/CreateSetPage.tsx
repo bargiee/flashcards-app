@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import FlashcardInput from '../components/FlashcardInput';
 import { FaPlus } from 'react-icons/fa';
-import axios from 'axios';
+import toast from 'react-hot-toast';
+import api from '../api';
+import FlashcardInput from '../components/FlashcardInput';
 import NavBar from '../components/NavBar';
 
 export default function CreateSetPage() {
@@ -27,35 +28,29 @@ export default function CreateSetPage() {
     };
 
     const handleSubmit = async () => {
-        if (!isFormValid()) {
-            alert('Please enter a title and at least one complete flashcard.');
-            return;
-        }
+        if (!isFormValid()) return toast.error('Enter title and at least 1 card');
 
         try {
-            const res = await axios.post('http://localhost:8080/api/decks', {
-                userId: 1,
+            const { data: deck } = await api.post('/decks', {
                 name: title,
                 description: '',
             });
-            const deckId = res.data.id;
 
-            const flashcardRequests = cards
+            const reqs = cards
                 .filter((c) => c.term.trim() && c.definition.trim())
-                .map((card) =>
-                    axios.post('http://localhost:8080/api/flashcards', {
-                        deckId,
-                        term: card.term,
-                        definition: card.definition,
+                .map((c) =>
+                    api.post('/flashcards', {
+                        deckId: deck.id,
+                        term: c.term,
+                        definition: c.definition,
                     })
                 );
 
-            await Promise.all(flashcardRequests);
-
-            alert('Deck created');
+            await Promise.all(reqs);
+            toast.success('Deck created!');
         } catch (err) {
             console.error(err);
-            alert('Error creating set');
+            toast.error('Error creating deck');
         }
     };
 

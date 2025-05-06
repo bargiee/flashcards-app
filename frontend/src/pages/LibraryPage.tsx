@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { FaPlus } from 'react-icons/fa';
+import api from '../api';
 import LibraryCard from '../components/LibraryCard';
 import NavBar from '../components/NavBar';
-import { FaPlus } from 'react-icons/fa';
 
 interface Deck {
     id: number;
@@ -15,16 +15,14 @@ export default function LibraryPage() {
     const [decks, setDecks] = useState<Deck[]>([]);
 
     useEffect(() => {
-        const fetchDecks = async () => {
+        (async () => {
             try {
-                const res = await axios.get('http://localhost:8080/api/decks');
-                setDecks(res.data);
+                const { data } = await api.get<Deck[]>('/decks');
+                setDecks(data);
             } catch (err) {
                 console.error(err);
             }
-        };
-
-        fetchDecks();
+        })();
     }, []);
 
     return (
