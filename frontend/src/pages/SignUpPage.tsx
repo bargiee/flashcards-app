@@ -1,7 +1,10 @@
 import { FormEvent, useState } from 'react';
-import Logo from '../components/Logo';
-import LoginBox from '../assets/LoginBox.svg';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/authContext';
 import { FaEnvelope, FaLock, FaUser } from 'react-icons/fa';
+import toast from 'react-hot-toast';
+import LoginBox from '../assets/LoginBox.svg';
+import Logo from '../components/Logo';
 
 const usernamePattern = /^[A-Za-z][A-Za-z0-9-]{2,29}$/;
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
@@ -17,6 +20,9 @@ export default function SignUpPage() {
     const [touched, setTouched] = useState<Record<string, boolean>>({});
     const [loading, setLoading] = useState(false);
 
+    const navigate = useNavigate();
+    const { register } = useAuth();
+
     const handleChange = (field: keyof typeof form, value: string) =>
         setForm((p) => ({ ...p, [field]: value }));
 
@@ -28,11 +34,14 @@ export default function SignUpPage() {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        if (!isFormValid) return;
         setLoading(true);
         try {
-            console.log('signup', form);
-            // todo endpoint
+            const { username, email, password } = form;
+            await register(username, email, password);
+            navigate('/home');
+        } catch (err: any) {
+            console.error(err);
+            toast.error('Registration failed');
         } finally {
             setLoading(false);
         }

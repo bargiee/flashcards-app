@@ -1,18 +1,26 @@
 import { FormEvent, useState } from 'react';
-
-import Logo from '../components/Logo';
-import LoginBox from '../assets/LoginBox.svg';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/authContext';
 import { FaEnvelope, FaLock } from 'react-icons/fa';
+import LoginBox from '../assets/LoginBox.svg';
+import Logo from '../components/Logo';
+import toast from 'react-hot-toast';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [remember, setRemember] = useState(false);
+    const navigate = useNavigate();
+    const { login } = useAuth();
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        // todo endpoint
-        console.log({ email, password, remember });
+        try {
+            await login(email, password);
+            navigate('/home');
+        } catch {
+            toast.error('Invalid credentials');
+        }
     };
 
     return (
@@ -75,7 +83,7 @@ const LoginPage = () => {
                                 Log in
                             </button>
                             <p className="mt-4 text-xs font-museo text-gray-600">
-                                Don’t have an account?{' '}
+                                Don't have an account?{' '}
                                 <a
                                     href="/signup"
                                     className="text-yellow-400 hover:underline font-medium"
