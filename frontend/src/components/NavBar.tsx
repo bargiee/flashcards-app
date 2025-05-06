@@ -1,11 +1,13 @@
 import { Link, useLocation } from 'react-router-dom';
-import { FaHome, FaFolder, FaUser, FaPlus } from 'react-icons/fa';
+import { useAuth } from '../context/authContext';
+import { FaHome, FaFolder, FaPlus } from 'react-icons/fa';
 import { useState } from 'react';
 import Logo from './Logo';
 
 const NavBar = () => {
     const location = useLocation();
     const [hoveredLink, setHoveredLink] = useState<string | null>(null);
+    const { logout } = useAuth();
 
     const isActive = (path: string) => location.pathname === path;
 
@@ -48,10 +50,9 @@ const NavBar = () => {
                     );
                 })}
             </div>
-
-            <Link to="/profile" className="text-2xl hover:text-yellow-500">
-                <FaUser />
-            </Link>
+            <button onClick={logout} className="font-semibold text-red-black hover:text-red-400">
+                Logout
+            </button>
         </nav>
     );
 };
