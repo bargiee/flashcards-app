@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import api from '../api';
 import FlashcardInput from '../components/FlashcardInput';
 import NavBar from '../components/NavBar';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateSetPage() {
     const [title, setTitle] = useState('');
@@ -12,6 +13,8 @@ export default function CreateSetPage() {
         { term: '', definition: '' },
         { term: '', definition: '' },
     ]);
+
+    const navigate = useNavigate();
 
     const handleCardChange = (index: number, field: 'term' | 'definition', value: string) => {
         const updated = [...cards];
@@ -48,6 +51,7 @@ export default function CreateSetPage() {
 
             await Promise.all(reqs);
             toast.success('Deck created!');
+            navigate('/library');
         } catch (err) {
             console.error(err);
             toast.error('Error creating deck');
