@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaPlus } from 'react-icons/fa';
 import api from '../api';
 import LibraryCard from '../components/LibraryCard';
@@ -9,10 +10,13 @@ interface Deck {
     name: string;
     createdAt: string;
     flashcards: { id: number }[];
+    updatedAt: string;
 }
 
 export default function LibraryPage() {
     const [decks, setDecks] = useState<Deck[]>([]);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         (async () => {
@@ -38,7 +42,8 @@ export default function LibraryPage() {
                         key={deck.id}
                         title={deck.name}
                         termsCount={deck.flashcards?.length || 0}
-                        lastReviewed="2 days ago" // todo
+                        lastReviewed={deck.updatedAt}
+                        onClick={() => navigate(`/sets/${deck.id}`)}
                     />
                 ))}
 
