@@ -1,5 +1,3 @@
-import { FaTrash } from 'react-icons/fa';
-
 interface Props {
     title: string;
     termsCount: number;
