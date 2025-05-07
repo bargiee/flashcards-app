@@ -25,7 +25,15 @@ export const getDeckById = async (req: Request, res: Response) => {
     try {
         const deck = await prisma.deck.findFirst({
             where: { id: deckId, userId },
-            include: { flashcards: { select: { id: true } } },
+            include: {
+                flashcards: {
+                    select: {
+                        id: true,
+                        term: true,
+                        definition: true,
+                    },
+                },
+            },
         });
         if (!deck) {
             return res.status(404).json({ message: 'Deck not found' });
@@ -60,24 +68,39 @@ export const createDeck = async (req: Request, res: Response) => {
 export const updateDeck = async (req: Request, res: Response) => {
     const userId = (req.user as any).id;
     const deckId = Number(req.params.id);
-    const { name, description } = req.body;
+    const { name, flashcards } = req.body as {
+        name: string;
+        flashcards: { id?: number; term: string; definition: string }[];
+    };
 
     try {
-        const existing = await prisma.deck.findFirst({ where: { id: deckId, userId } });
-        if (!existing) {
-            return res.status(404).json({ message: 'Deck not found' });
-        }
-        const updated = await prisma.deck.update({
-            where: { id: deckId },
-            data: {
-                name: name ?? existing.name,
-                description: description ?? existing.description,
-            },
-        });
-        return res.status(200).json(updated);
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ message: 'Error updating deck' });
+        await prisma.deck.findFirstOrThrow({ where: { id: deckId, userId } });
+
+        const incomingIds = flashcards.filter((fc) => fc.id).map((fc) => fc.id!);
+
+        await prisma.$transaction([
+            prisma.deck.update({ where: { id: deckId }, data: { name } }),
+
+            prisma.flashcard.deleteMany({
+                where: { deckId, id: { notIn: incomingIds } },
+            }),
+
+            ...flashcards.map((fc) =>
+                fc.id
+                    ? prisma.flashcard.update({
+                          where: { id: fc.id },
+                          data: { term: fc.term, definition: fc.definition },
+                      })
+                    : prisma.flashcard.create({
+                          data: { term: fc.term, definition: fc.definition, deckId },
+                      })
+            ),
+        ]);
+
+        res.sendStatus(204);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Failed to update deck' });
     }
 };
 
