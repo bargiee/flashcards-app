@@ -8,6 +8,8 @@ import HomePage from './pages/HomePage';
 import LibraryPage from './pages/LibraryPage';
 import PrivateRoute from './routes/PrivateRoute';
 import AppToaster from './components/AppToaster';
+import FlashcardSetViewPage from './pages/FlashcardSetViewPage';
+import FlashcardSetEditPage from './pages/FlashcardSetEditPage';
 
 function App() {
     return (
@@ -38,6 +40,23 @@ function App() {
                     element={
                         <PrivateRoute>
                             <CreateSetPage />
+                        </PrivateRoute>
+                    }
+                />
+                <Route
+                    path="/sets/:id"
+                    element={
+                        <PrivateRoute>
+                            <FlashcardSetViewPage />
+                        </PrivateRoute>
+                    }
+                />
+
+                <Route
+                    path="/sets/:id/edit"
+                    element={
+                        <PrivateRoute>
+                            <FlashcardSetEditPage />
                         </PrivateRoute>
                     }
                 />
