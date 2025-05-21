@@ -66,6 +66,29 @@ export default function CreateSetPage() {
         return hasTitle && hasValidCard;
     };
 
+    const handleCsvImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const text = await file.text();
+        try {
+            const { data: deck } = await api.post('/decks', {
+                name: 'Imported Set',
+                description: '',
+            });
+
+            await api.post('/import', {
+                csv: text,
+                deckId: deck.id,
+            });
+
+            toast.success('Deck created and import queued!');
+            navigate('/library');
+        } catch (err) {
+            toast.error('Import failed');
+        }
+    };
+
     return (
         <>
             <NavBar />
@@ -82,6 +105,20 @@ export default function CreateSetPage() {
                             placeholder="Enter a title, like “Biology - Chapter 22: Evolution”"
                             className="w-full bg-black text-white px-5 py-4 pr-32 rounded-xl focus:outline-none"
                         />
+                        <label
+                            htmlFor="csv-upload"
+                            className="absolute top-1/2 right-32 -translate-y-1/2 border border-yellow-400 text-yellow-400 font-medium px-6 py-1 rounded-xl cursor-pointer hover:bg-yellow-500 hover:text-black transition"
+                        >
+                            Import CSV
+                        </label>
+                        <input
+                            id="csv-upload"
+                            type="file"
+                            accept=".csv"
+                            onChange={handleCsvImport}
+                            className="hidden"
+                        />
+
                         <button
                             onClick={handleSubmit}
                             className="absolute top-1/2 right-3 -translate-y-1/2 bg-yellow-400 hover:bg-yellow-500 text-black font-bold px-6 py-1 rounded-xl"
