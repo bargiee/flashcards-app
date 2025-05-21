@@ -12,13 +12,22 @@ services:
         ports:
             - '5433:5432'
 
+    rabbitmq:
+        image: rabbitmq:3-management
+        ports:
+            - '5672:5672'
+            - '15672:15672'
+        environment:
+            RABBITMQ_DEFAULT_USER: guest
+            RABBITMQ_DEFAULT_PASS: guest
+
     backend:
         build:
             context: ./backend
             dockerfile: Dockerfile
         volumes:
             - ./backend:/app
-            - /app/node_modules # zapobiega nadpisaniu node_modules lokalnym pustym folderem
+            - /app/node_modules
         ports:
             - '8080:8080'
         environment:
@@ -27,8 +36,10 @@ services:
             DB_USER: myuser
             DB_PASSWORD: mypassword
             DB_NAME: mydatabase
+            RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
         depends_on:
             - db
+            - rabbitmq
 
 volumes:
     pgdata:
