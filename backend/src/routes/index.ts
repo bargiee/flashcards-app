@@ -7,6 +7,7 @@ import flashcardRoutes from './flashcardRoutes';
 import favoriteDeckRoutes from './favoriteDeckRoutes';
 import progressRoutes from './progressRoutes';
 import authRoutes from './authRoutes';
+import importRoutes from './importRoutes';
 
 const router = Router();
 
@@ -18,5 +19,6 @@ router.use('/decks', deckRoutes);
 router.use('/flashcards', flashcardRoutes);
 router.use('/favorite-decks', favoriteDeckRoutes);
 router.use('/progress', progressRoutes);
+router.use('/import', importRoutes);
 
 export default router;
