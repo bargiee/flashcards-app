@@ -48,86 +48,86 @@ export default function SignUpPage() {
     };
 
     return (
-        <div className="scale-[0.95] origin-center">
+        <div className="origin-center">
             <div className="min-h-screen flex flex-col items-center justify-center gap-16">
-                <Logo className="h-16" />
+                <Logo className="h-16 mb-12 sm:mb-0" />
 
                 <div className="relative">
-                    <img src={LoginBox} className="mb-8 max-w-100 select-none" />
+                    <img src={LoginBox} className="mb-8 max-w-100 select-none px-2" />
 
                     <form
                         onSubmit={handleSubmit}
                         className="absolute inset-0 flex flex-col items-center justify-center px-8"
                     >
-                        <div className="w-full mb-8 relative px-20">
+                        <div className="w-full relative px-5 mb-2 sm:mb-8 sm:px-20">
                             <input
                                 type="text"
                                 placeholder="Username"
                                 value={form.username}
                                 onChange={(e) => handleChange('username', e.target.value)}
                                 onBlur={() => setTouched((t) => ({ ...t, username: true }))}
-                                className="w-full border-b-4 border-black placeholder-black placeholder:font-museo focus:outline-none pb-4 pl-2"
+                                className="w-full border-b-4 border-black placeholder-black placeholder:font-museo focus:outline-none pb-2 pl-2 sm:pb-4"
                                 pattern={usernamePattern.source}
                                 required
                             />
-                            <FaUser className="absolute right-0 top-1/2 -translate-y-4 -translate-x-24 text-black" />
+                            <FaUser className="absolute right-0 top-1/2 -translate-y-4 -translate-x-10 text-black sm:-translate-x-24" />
                             {touched.username && !isUsernameValid && (
-                                <p className="mt-2 text-xs text-red-600 font-barlow">
+                                <p className="text-xs text-red-600 font-barlow sm:mt-2">
                                     3-30 characters, must start with a letter.
                                 </p>
                             )}
                         </div>
 
-                        <div className="w-full mb-8 relative px-20">
+                        <div className="w-full relative px-5 mb-2 sm:mb-8 sm:px-20">
                             <input
                                 type="email"
                                 placeholder="Email"
                                 value={form.email}
                                 onChange={(e) => handleChange('email', e.target.value)}
                                 onBlur={() => setTouched((t) => ({ ...t, email: true }))}
-                                className="w-full border-b-4 border-black placeholder-black placeholder:font-museo focus:outline-none pb-4 pl-2"
+                                className="w-full border-b-4 border-black placeholder-black placeholder:font-museo focus:outline-none pb-2 pl-2 sm:pb-4"
                                 required
                             />
-                            <FaEnvelope className="absolute right-0 top-1/2 -translate-y-4 -translate-x-24 text-black" />
+                            <FaEnvelope className="absolute right-0 top-1/2 -translate-y-4 -translate-x-10 text-black sm:-translate-x-24" />
                             {touched.email && !isEmailValid && (
-                                <p className="mt-2 text-xs text-red-600 font-barlow">
+                                <p className="text-xs text-red-600 font-barlow sm:mt-2">
                                     Enter a valid e-mail address.
                                 </p>
                             )}
                         </div>
 
-                        <div className="w-full mb-8 relative px-20">
+                        <div className="w-full relative px-5 mb-2 sm:mb-8 sm:px-20">
                             <input
                                 type="password"
                                 placeholder="Password"
                                 value={form.password}
                                 onChange={(e) => handleChange('password', e.target.value)}
                                 onBlur={() => setTouched((t) => ({ ...t, password: true }))}
-                                className="w-full border-b-4 border-black placeholder-black placeholder:font-museo focus:outline-none pb-4 pl-2"
+                                className="w-full border-b-4 border-black placeholder-black placeholder:font-museo focus:outline-none pb-2 pl-2 sm:pb-4"
                                 required
                             />
-                            <FaLock className="absolute right-0 top-1/2 -translate-y-4 -translate-x-24 text-black" />
+                            <FaLock className="absolute right-0 top-1/2 -translate-y-4 -translate-x-10 text-black sm:-translate-x-24" />
                             {touched.password && !isPwdValid && (
-                                <p className="mt-2 text-xs text-red-600 font-barlow">
+                                <p className="text-xs text-red-600 font-barlow sm:mt-2">
                                     Minimum 8 characters - at least 1 uppercase, 1 lowercase and 1
                                     digit.
                                 </p>
                             )}
                         </div>
 
-                        <div className="w-full mb-10 relative px-20">
+                        <div className="w-full relative px-5 mb-1 sm:px-20 sm-mb-8">
                             <input
                                 type="password"
                                 placeholder="Confirm password"
                                 value={form.confirm}
                                 onChange={(e) => handleChange('confirm', e.target.value)}
                                 onBlur={() => setTouched((t) => ({ ...t, confirm: true }))}
-                                className="w-full border-b-4 border-black placeholder-black placeholder:font-museo focus:outline-none pb-4 pl-2"
+                                className="w-full border-b-4 border-black placeholder-black placeholder:font-museo focus:outline-none pb-2 pl-2 sm:pb-4"
                                 required
                             />
-                            <FaLock className="absolute right-0 top-1/2 -translate-y-4 -translate-x-24 text-black" />
+                            <FaLock className="absolute right-0 top-1/2 -translate-y-4 -translate-x-10 text-black sm:-translate-x-24" />
                             {touched.confirm && !isMatch && (
-                                <p className="mt-2 text-xs text-red-600 font-barlow">
+                                <p className="text-xs text-red-600 font-barlow sm:mt-2">
                                     Passwords do not match.
                                 </p>
                             )}
@@ -136,13 +136,13 @@ export default function SignUpPage() {
                         <button
                             type="submit"
                             disabled={!isFormValid || loading}
-                            className={`bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-2 px-12 rounded-full shadow transition-colors
+                            className={`bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-1 px-10 rounded-full shadow transition-colors mt-2 sm:mt-8 sm:py-2 sm:px-12
                 ${(!isFormValid || loading) && 'bg-yellow-500 opacity-40 cursor-not-allowed'}`}
                         >
                             {loading ? 'Creating…' : 'Create account'}
                         </button>
 
-                        <p className="mt-4 text-xs font-museo text-gray-600">
+                        <p className="mt-1 text-xs font-museo text-gray-600 md:mt-4">
                             Already have an account?{' '}
                             <a
                                 href="/login"

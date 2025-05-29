@@ -18,22 +18,32 @@ const NavBar = () => {
     ];
 
     return (
-        <nav className="flex items-center justify-between px-8 py-4 font-barlow">
-            <Logo className="h-10" />
+        <nav className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between px-8 py-4 font-barlow">
+            <div className="flex w-full items-center justify-between sm:w-auto sm:justify-start">
+                <Logo className="h-10 min-w-[6rem]" />
 
-            <div className="flex items-center justify-center text-lg">
+                <button
+                    onClick={logout}
+                    className="font-semibold text-red-black hover:text-red-400 sm:hidden"
+                >
+                    Logout
+                </button>
+            </div>
+            <div className="flex justify-center text-lg mt-4 sm:mt-0 sm:justify-center sm:gap-6 w-full">
                 {navItems.map(({ to, icon, label }) => {
                     const active = isActive(to);
                     const isHovered = hoveredLink && hoveredLink !== to;
 
                     const baseClasses =
-                        'flex items-center gap-2 font-semibold px-12 rounded-full transition-all';
+                        'flex items-center gap-1 font-semibold px-6 rounded-full transition-all sm:gap-2 whitespace-nowrap sm:px-12';
 
                     const activeClasses =
-                        active && !isHovered ? 'bg-yellow-400 text-black px-20 py-1' : '';
+                        active && !isHovered
+                            ? 'bg-yellow-400 text-black px-6 py-1 whitespace-nowrap sm:px-8 md:px-16 lg:px-20'
+                            : '';
 
                     const hoverClasses = !active
-                        ? 'hover:bg-yellow-400 hover:text-black hover:px-20 hover:py-1'
+                        ? 'hover:bg-yellow-400 hover:text-black hover:px-6 hover:py-1 sm:px-8 whitespace-nowrap md:hover:px-16 lg:hover:px-20'
                         : '';
 
                     return (
@@ -50,7 +60,10 @@ const NavBar = () => {
                     );
                 })}
             </div>
-            <button onClick={logout} className="font-semibold text-red-black hover:text-red-400">
+            <button
+                onClick={logout}
+                className="hidden sm:block font-semibold text-red-black hover:text-red-400"
+            >
                 Logout
             </button>
         </nav>

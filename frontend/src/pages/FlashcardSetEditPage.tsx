@@ -84,7 +84,7 @@ export default function FlashcardSetDetailsPage() {
                 </button>
 
                 <div className="sticky top-0 z-10 bg-white pt-4 pb-6 -mx-4 px-4 mb-10">
-                    <div className="bg-black text-white rounded-xl flex items-center justify-between px-4 py-4">
+                    <div className="bg-black text-white rounded-xl flex items-center justify-between pl-6 pr-4 py-4">
                         {editing ? (
                             <input
                                 value={name}

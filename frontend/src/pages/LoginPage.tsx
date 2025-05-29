@@ -25,17 +25,17 @@ const LoginPage = () => {
 
     return (
         <>
-            <div className="scale-[0.95] origin-center">
+            <div className="origin-center">
                 <div className="min-h-screen flex flex-col items-center justify-center gap-16">
-                    <Logo className="h-16" />
+                    <Logo className="h-16 mb-12 sm:mb-0" />
                     <div className="relative">
-                        <img src={LoginBox} className="mb-8 max-w-100" />
+                        <img src={LoginBox} className="mb-8 max-w-100 px-2" />
 
                         <form
                             onSubmit={handleSubmit}
                             className="absolute inset-0 flex flex-col items-center justify-center px-8"
                         >
-                            <div className="w-full mb-12 relative px-20">
+                            <div className="w-full mb-4 relative px-5 sm:px-20 sm:mb-12">
                                 <input
                                     type="email"
                                     placeholder="Email"
@@ -44,9 +44,9 @@ const LoginPage = () => {
                                     className="w-full border-b-4 border-black placeholder-black placeholder:font-museo focus:outline-none pb-4 pl-2"
                                     required
                                 />
-                                <FaEnvelope className="absolute right-0 top-1/2 transform -translate-y-4 -translate-x-24 text-black" />
+                                <FaEnvelope className="absolute right-0 top-1/2 transform -translate-y-4 -translate-x-10 text-black sm:-translate-x-24" />
                             </div>
-                            <div className="w-full mb-4 relative px-20">
+                            <div className="w-full relative px-5 sm:mb-4 sm:px-20">
                                 <input
                                     type="password"
                                     placeholder="Password"
@@ -55,10 +55,10 @@ const LoginPage = () => {
                                     className="w-full border-b-4 border-black placeholder-black placeholder:font-museo focus:outline-none pb-4 pl-2"
                                     required
                                 />
-                                <FaLock className="absolute right-0 top-1/2 transform -translate-y-4 -translate-x-24 text-black" />
+                                <FaLock className="absolute right-0 top-1/2 transform -translate-y-4 -translate-x-10 text-black sm:-translate-x-24" />
                             </div>
 
-                            <div className="w-full flex justify-between items-center text-sm mb-6 px-20">
+                            <div className="w-full flex justify-between items-center text-sm mt-2 px-5 sm:mb-6 sm:px-20 sm:mt-0">
                                 <label className="flex items-center">
                                     <input
                                         type="checkbox"
@@ -78,7 +78,7 @@ const LoginPage = () => {
 
                             <button
                                 type="submit"
-                                className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-2 px-20 mt-8 rounded-full shadow"
+                                className="bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-2 px-20 mt-2 rounded-full shadow sm:mt-8"
                             >
                                 Log in
                             </button>

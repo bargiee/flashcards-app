@@ -43,7 +43,7 @@ export default function FlashcardSetEditPage() {
                 </Link>
 
                 <div className="sticky top-0 z-10 bg-white pt-4 pb-6 -mx-4 px-4 mb-10">
-                    <div className="bg-black text-white rounded-xl flex items-center justify-between px-4 py-4">
+                    <div className="bg-black text-white rounded-xl flex items-center justify-between pl-6 pr-4 py-4">
                         <h1 className="font-museo text-lg sm:text-xl font-semibold flex-1">
                             {name}
                             <button
@@ -53,7 +53,10 @@ export default function FlashcardSetEditPage() {
                                 <FaEdit />
                             </button>
                         </h1>
-                        <button className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black font-bold px-5 py-1.5 rounded-xl">
+                        <button
+                            onClick={() => navigate(`/study/${id}`)}
+                            className="flex items-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-black font-bold px-5 py-1.5 rounded-xl"
+                        >
                             <TbCardsFilled />
                             Flashcards
                         </button>

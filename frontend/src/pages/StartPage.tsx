@@ -8,7 +8,7 @@ export default function StartPage() {
         <main className="min-h-screen flex flex-col">
             <header className="flex items-center justify-between py-4 px-8">
                 <Logo className="h-10" />
-                <nav className="flex gap-4 font-barlow">
+                <nav className="flex gap-4 font-barlow pl-2">
                     <Link
                         to="/login"
                         className="self-center hover:underline text-lg hover:text-yellow-500"
@@ -33,7 +33,7 @@ export default function StartPage() {
                 </p>
             </section>
 
-            <section className="flex flex-col lg:flex-row items-center justify-center gap-12 mt-16">
+            <section className="flex flex-col md:flex-row items-center justify-center gap-12 mt-16 px-4">
                 <FeatureCard
                     icon={<FaRegClock />}
                     title="Spaced repetition"

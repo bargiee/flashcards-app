@@ -107,7 +107,7 @@ export default function CreateSetPage() {
                         />
                         <label
                             htmlFor="csv-upload"
-                            className="absolute top-1/2 right-32 -translate-y-1/2 border border-yellow-400 text-yellow-400 font-medium px-6 py-1 rounded-xl cursor-pointer hover:bg-yellow-500 hover:text-black transition"
+                            className="absolute top-1/2 right-32 -translate-y-1/2 border border-yellow-400 text-yellow-400 font-medium px-6 py-1 rounded-xl cursor-pointer bg-black hover:bg-yellow-500 hover:text-black transition"
                         >
                             Import CSV
                         </label>
