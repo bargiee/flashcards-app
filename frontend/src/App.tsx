@@ -10,6 +10,7 @@ import PrivateRoute from './routes/PrivateRoute';
 import AppToaster from './components/AppToaster';
 import FlashcardSetViewPage from './pages/FlashcardSetViewPage';
 import FlashcardSetEditPage from './pages/FlashcardSetEditPage';
+import FlashcardStudyPage from './pages/FlashcardStudyPage';
 
 function App() {
     return (
@@ -60,6 +61,7 @@ function App() {
                         </PrivateRoute>
                     }
                 />
+                <Route path="/study/:id" element={<FlashcardStudyPage />} />
                 <Route path="*" element={<NotFoundPage />} />
             </Routes>
             <AppToaster />

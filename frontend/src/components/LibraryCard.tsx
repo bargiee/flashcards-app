@@ -13,11 +13,13 @@ const LibraryCard = ({ title, termsCount, lastReviewed, onDelete, onClick }: Pro
             className="rounded-xl border overflow-hidden shadow-sm mb-6 hover:shadow-lg hover:-translate-y-0.5 transition cursor-pointer"
         >
             <div className="bg-black text-white px-6 py-3 flex justify-between items-center">
-                <span className="font-semibold">{title}</span>
+                <span className="font-semibold font-museo">{title}</span>
             </div>
             <div className="mt-4">
                 <div className="bg-white px-6 py-4 flex justify-between text-sm">
-                    <span className="text-gray-600 font-normal">Last revised {lastReviewed}</span>
+                    <span className="text-gray-400 font-extralight">
+                        Last reviewed: {lastReviewed}
+                    </span>
                     <span className="text-gray-800 font-semibold">{termsCount} terms</span>
                 </div>
             </div>

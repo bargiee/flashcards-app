@@ -7,7 +7,7 @@ import {
 
 const router = Router();
 
-router.get('/user/:userId', getProgressByUser);
+router.get('/user/', getProgressByUser);
 router.post('/', createOrUpdateProgress);
 router.delete('/:id', deleteProgress);
 

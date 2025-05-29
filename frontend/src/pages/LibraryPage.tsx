@@ -9,13 +9,20 @@ interface Deck {
     id: number;
     name: string;
     createdAt: string;
-    flashcards: { id: number }[];
+    flashcards: { id: number; deckId: number }[];
     updatedAt: string;
+}
+
+interface ProgressEntry {
+    flashcard: {
+        deckId: number;
+    };
+    lastReviewed: string;
 }
 
 export default function LibraryPage() {
     const [decks, setDecks] = useState<Deck[]>([]);
-
+    const [progress, setProgress] = useState<ProgressEntry[]>([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,10 +31,30 @@ export default function LibraryPage() {
                 const { data } = await api.get<Deck[]>('/decks');
                 setDecks(data);
             } catch (err) {
-                console.error(err);
+                console.error('Error fetching decks:', err);
+            }
+        })();
+
+        (async () => {
+            try {
+                const { data } = await api.get<ProgressEntry[]>('/progress/user');
+                setProgress(data);
+            } catch (err) {
+                console.error('Error fetching progress:', err);
             }
         })();
     }, []);
+
+    const getLastReviewedDate = (deckId: number): string | null => {
+        const relevant = progress
+            .filter((p) => p.flashcard.deckId === deckId)
+            .map((p) => new Date(p.lastReviewed));
+
+        if (!relevant.length) return null;
+
+        const latest = new Date(Math.max(...relevant.map((d) => d.getTime())));
+        return latest.toLocaleDateString();
+    };
 
     return (
         <>
@@ -42,7 +69,7 @@ export default function LibraryPage() {
                         key={deck.id}
                         title={deck.name}
                         termsCount={deck.flashcards?.length || 0}
-                        lastReviewed={deck.updatedAt}
+                        lastReviewed={getLastReviewedDate(deck.id) || 'Never reviewed'}
                         onClick={() => navigate(`/sets/${deck.id}`)}
                     />
                 ))}
