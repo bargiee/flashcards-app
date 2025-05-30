@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import amqp from 'amqplib';
+import * as service from '../services/importService';
 
 export const importFlashcards = async (req: Request, res: Response) => {
     const { csv, deckId } = req.body;
@@ -9,17 +9,7 @@ export const importFlashcards = async (req: Request, res: Response) => {
     }
 
     try {
-        const conn = await amqp.connect(process.env.RABBITMQ_URL || 'amqp://localhost');
-        const channel = await conn.createChannel();
-        await channel.assertQueue('flashcard-import', { durable: true });
-
-        channel.sendToQueue('flashcard-import', Buffer.from(JSON.stringify({ csv, deckId })), {
-            persistent: true,
-        });
-
-        await channel.close();
-        await conn.close();
-
+        await service.queueImport(csv, deckId);
         res.status(200).json({ message: 'Import queued successfully' });
     } catch (err) {
         console.error(err);

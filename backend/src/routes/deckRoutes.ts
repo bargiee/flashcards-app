@@ -11,10 +11,11 @@ import {
 const router = Router();
 
 router.get('/', getAllDecks);
-router.get('/:id', getDeckById);
 router.post('/', createDeck);
+
+router.get('/:id/flashcards', getFlashcardsForDeck);
 router.put('/:id', updateDeck);
 router.delete('/:id', deleteDeck);
-router.get('/:id/flashcards', getFlashcardsForDeck);
+router.get('/:id', getDeckById);
 
 export default router;
