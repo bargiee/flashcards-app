@@ -15,10 +15,14 @@ export const register = async (req: Request, res: Response) => {
     }
 };
 
-export const login = (req: Request, res: Response, next: NextFunction) => {
+export const login = (req: Request, res: Response, next: NextFunction) =>
     service.authenticateUser(req, res, next);
-};
+
+export const refresh = (req: Request, res: Response) => service.refreshTokens(req, res);
 
 export const logout = (_req: Request, res: Response) => {
-    res.clearCookie('token').status(200).json({ message: 'Logged out' });
+    res.clearCookie('token')
+        .clearCookie('refreshToken', { path: '/api/auth/refresh' })
+        .status(200)
+        .json({ message: 'Logged out' });
 };

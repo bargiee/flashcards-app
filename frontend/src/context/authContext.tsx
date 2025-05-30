@@ -31,8 +31,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
         try {
             const { data } = await api.get<User>('/users/me');
             setUser(data);
-        } catch {
-            setUser(null);
+        } catch (err: any) {
+            if (err?.response?.status === 401) {
+                setUser(null);
+            }
         } finally {
             setIsChecking(false);
         }
