@@ -29,21 +29,21 @@ const NavBar = () => {
                     Logout
                 </button>
             </div>
-            <div className="flex justify-center text-lg mt-4 sm:mt-0 sm:justify-center sm:gap-6 w-full">
+            <div className="flex justify-center text-lg mt-4 sm:mt-0 sm:justify-center w-full">
                 {navItems.map(({ to, icon, label }) => {
                     const active = isActive(to);
                     const isHovered = hoveredLink && hoveredLink !== to;
 
                     const baseClasses =
-                        'flex items-center gap-1 font-semibold px-6 rounded-full transition-all sm:gap-2 whitespace-nowrap sm:px-12';
+                        'flex items-center gap-1 font-semibold px-8 rounded-full transition-all md:gap-2 whitespace-nowrap';
 
                     const activeClasses =
                         active && !isHovered
-                            ? 'bg-yellow-400 text-black px-6 py-1 whitespace-nowrap sm:px-8 md:px-16 lg:px-20'
+                            ? 'bg-yellow-400 text-black px-8 py-1 whitespace-nowrap sm:px-8 md:px-12 lg:px-16'
                             : '';
 
                     const hoverClasses = !active
-                        ? 'hover:bg-yellow-400 hover:text-black hover:px-6 hover:py-1 sm:px-8 whitespace-nowrap md:hover:px-16 lg:hover:px-20'
+                        ? 'hover:bg-yellow-400 hover:text-black hover:px-8  hover:py-1 md:hover:px-12 lg:hover:px-16 whitespace-nowrap'
                         : '';
 
                     return (
