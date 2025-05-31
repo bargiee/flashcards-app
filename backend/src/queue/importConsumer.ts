@@ -25,7 +25,6 @@ export async function startImportConsumer() {
             }
 
             channel.ack(msg);
-            console.log(`Imported ${records.length} flashcards`);
         } catch (err) {
             console.error('Failed to process import:', err);
             channel.nack(msg, false, false);

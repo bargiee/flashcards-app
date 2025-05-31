@@ -1,53 +1,51 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
+import { HttpError } from '../utils/HttpError';
 import * as service from '../services/favoriteDeckService';
 
-export const getFavoriteDecksByUser = async (req: Request, res: Response) => {
+export const getFavoriteDecksByUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId = (req.user as any).id;
         const favs = await service.getFavorites(userId);
-        res.status(200).json(favs);
+        return res.status(200).json(favs);
     } catch (e) {
-        console.error(e);
-        res.status(500).json({ message: 'Error fetching favorites' });
+        return next(e);
     }
 };
 
-export const addFavoriteDeck = async (req: Request, res: Response) => {
+export const addFavoriteDeck = async (req: Request, res: Response, next: NextFunction) => {
     const userId = (req.user as any).id;
     const { deckId } = req.body;
 
     if (!deckId) {
-        return res.status(400).json({ message: 'deckId is required' });
+        return next(new HttpError(400, 'deckId is required'));
     }
 
     try {
         const fav = await service.addFavorite(userId, Number(deckId));
-        res.status(201).json(fav);
+        return res.status(201).json(fav);
     } catch (e: any) {
         if (e.message === 'ALREADY_EXISTS') {
-            return res.status(409).json({ message: 'Already in favorites' });
+            return next(new HttpError(409, 'Already in favorites'));
         }
-        console.error(e);
-        res.status(500).json({ message: 'Error adding favorite' });
+        return next(e);
     }
 };
 
-export const removeFavoriteDeck = async (req: Request, res: Response) => {
+export const removeFavoriteDeck = async (req: Request, res: Response, next: NextFunction) => {
     const userId = (req.user as any).id;
     const { deckId } = req.body;
 
     if (!deckId) {
-        return res.status(400).json({ message: 'deckId is required' });
+        return next(new HttpError(400, 'deckId is required'));
     }
 
     try {
         await service.removeFavorite(userId, Number(deckId));
-        res.status(200).json({ message: 'Removed from favorites' });
+        return res.status(200).json({ message: 'Removed from favorites' });
     } catch (e: any) {
         if (e.message === 'NOT_FOUND') {
-            return res.status(404).json({ message: 'Favorite not found' });
+            return next(new HttpError(404, 'Favorite not found'));
         }
-        console.error(e);
-        res.status(500).json({ message: 'Error removing favorite' });
+        return next(e);
     }
 };

@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import passport from './config/passport';
 import routes from './routes';
 import { startImportConsumer } from './queue/importConsumer';
+import { errorHandler } from './middleware/errorHandler';
 
 dotenv.config();
 
@@ -22,8 +23,7 @@ app.use(cookieParser());
 app.use(passport.initialize());
 
 app.use('/api', routes);
-
-app.use((_req, res) => res.status(404).json({ message: 'Not found' }));
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

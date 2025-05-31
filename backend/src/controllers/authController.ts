@@ -1,24 +1,30 @@
 import { Request, Response, NextFunction } from 'express';
+import { HttpError } from '../utils/HttpError';
 import * as service from '../services/authService';
 
-export const register = async (req: Request, res: Response) => {
+export const register = async (req: Request, res: Response, next: NextFunction) => {
     const { username, email, password } = req.body;
     try {
         const user = await service.registerUser(username, email, password);
         res.status(201).json({ id: user.id, username: user.username, email: user.email });
     } catch (e: any) {
         if (e.code === 'P2002') {
-            return res.status(409).json({ message: 'Username or email already exists' });
+            return next(new HttpError(409, 'Username or email already exists'));
         }
-        console.error(e);
-        res.status(500).json({ message: 'Error registering user' });
+        next(e);
     }
 };
 
 export const login = (req: Request, res: Response, next: NextFunction) =>
     service.authenticateUser(req, res, next);
 
-export const refresh = (req: Request, res: Response) => service.refreshTokens(req, res);
+export const refresh = (req: Request, res: Response, next: NextFunction) => {
+    try {
+        service.refreshTokens(req, res);
+    } catch (e) {
+        next(e);
+    }
+};
 
 export const logout = (_req: Request, res: Response) => {
     res.clearCookie('token')

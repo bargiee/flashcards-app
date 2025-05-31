@@ -1,26 +1,28 @@
+import { Request, Response, NextFunction } from 'express';
+import { HttpError } from '../utils/HttpError';
 import * as service from '../services/userService';
-import { Request, Response } from 'express';
 
-export const getMe = async (req: Request, res: Response) => {
+export const getMe = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId = (req.user as any).id;
         const user = await service.getUserById(userId);
-        if (!user) return res.status(404).json({ message: 'User not found' });
+
+        if (!user) {
+            return next(new HttpError(404, 'User not found'));
+        }
 
         const { password, ...safe } = user;
         return res.status(200).json(safe);
     } catch (e) {
-        console.error(e);
-        return res.status(500).json({ message: 'Error fetching user data' });
+        return next(e);
     }
 };
 
-export const getAllUsers = async (_req: Request, res: Response) => {
+export const getAllUsers = async (_req: Request, res: Response, next: NextFunction) => {
     try {
         const users = await service.getAllUsers();
         return res.status(200).json(users);
     } catch (e) {
-        console.error(e);
-        return res.status(500).json({ message: 'Error fetching users' });
+        return next(e);
     }
 };
