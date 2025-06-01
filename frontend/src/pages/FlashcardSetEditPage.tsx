@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api';
 import { FaTrash, FaPlus } from 'react-icons/fa';
+import { LuDownload } from 'react-icons/lu';
 import { MdEdit } from 'react-icons/md';
 import toast from 'react-hot-toast';
 import NavBar from '../components/NavBar';
+import { downloadCsvFile } from '../utils/exportCsv';
 
 interface Flashcard {
     id?: number;
@@ -54,6 +56,14 @@ export default function FlashcardSetDetailsPage() {
         } catch {
             toast.error('Error deleting deck');
         }
+    };
+
+    const exportCsv = () => {
+        if (!cards.length) {
+            toast.error('Nothing to export');
+            return;
+        }
+        downloadCsvFile(cards, `${name || 'flashcards'}.csv`);
     };
 
     const saveChanges = async () => {
@@ -108,6 +118,13 @@ export default function FlashcardSetDetailsPage() {
                                 className="text-gray-500 hover:text-yellow-400 text-lg"
                             >
                                 <FaTrash />
+                            </button>
+                            <button
+                                onClick={exportCsv}
+                                className="flex items-center gap-1 border border-yellow-400 text-yellow-400 font-medium px-5 py-1.5 rounded-xl hover:bg-yellow-500 hover:text-black transition"
+                            >
+                                <LuDownload />
+                                Export CSV
                             </button>
                             <button
                                 onClick={saveChanges}
