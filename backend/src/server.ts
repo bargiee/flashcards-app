@@ -6,6 +6,9 @@ import passport from './config/passport';
 import routes from './routes';
 import { startImportConsumer } from './queue/importConsumer';
 import { errorHandler } from './middleware/errorHandler';
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
+import swaggerOptions from './config/swagger';
 
 dotenv.config();
 
@@ -22,7 +25,12 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(passport.initialize());
 
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+
 app.use('/api', routes);
+
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 8080;
