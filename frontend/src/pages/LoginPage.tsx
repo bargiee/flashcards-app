@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import { FaEnvelope, FaLock } from 'react-icons/fa';
 import LoginBox from '../assets/LoginBox.svg';
@@ -10,14 +10,16 @@ const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [remember, setRemember] = useState(false);
-    const navigate = useNavigate();
-    const { login } = useAuth();
+    const { isAuthenticated, isChecking, login } = useAuth();
+
+    if (!isChecking && isAuthenticated) {
+        return <Navigate to="/home" replace />;
+    }
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try {
             await login(email, password);
-            navigate('/home');
         } catch {
             toast.error('Invalid credentials');
         }

@@ -11,8 +11,6 @@ const refreshClient = axios.create({
     withCredentials: true,
 });
 
-let isRefreshing = false;
-
 api.interceptors.response.use(
     (res) => res,
     async (err) => {
@@ -21,18 +19,18 @@ api.interceptors.response.use(
         if (err.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
-            if (!isRefreshing) {
-                isRefreshing = true;
-                try {
-                    await refreshClient.post('/auth/refresh');
-                    isRefreshing = false;
-                    return api(originalRequest);
-                } catch (err) {
-                    isRefreshing = false;
-                    toast.error('Your session has expired. Please log in again.');
+            try {
+                await refreshClient.post('/auth/refresh');
+                return api(originalRequest);
+            } catch (refreshErr) {
+                toast.error('Your session has expired. Please log in again.');
+
+                const publicPaths = ['/login', '/signup', '/start'];
+                if (!publicPaths.includes(window.location.pathname)) {
                     window.location.href = '/login';
-                    return Promise.reject(err);
                 }
+
+                return Promise.reject(refreshErr);
             }
         }
 

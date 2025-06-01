@@ -11,12 +11,28 @@ import AppToaster from './components/AppToaster';
 import FlashcardSetViewPage from './pages/FlashcardSetViewPage';
 import FlashcardSetEditPage from './pages/FlashcardSetEditPage';
 import FlashcardStudyPage from './pages/FlashcardStudyPage';
+import { useAuth } from './context/authContext';
+import { Navigate } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 
 function App() {
+    const { isAuthenticated, isChecking } = useAuth();
+
     return (
         <>
             <Routes>
-                <Route path="/" element={<StartPage />} />
+                <Route
+                    path="/"
+                    element={
+                        isChecking ? (
+                            <div className="flex items-center justify-center h-screen">
+                                <Loader2 className="size-10 animate-spin" />
+                            </div>
+                        ) : (
+                            <Navigate to={isAuthenticated ? '/home' : '/start'} replace />
+                        )
+                    }
+                />
                 <Route path="/start" element={<StartPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignUpPage />} />
