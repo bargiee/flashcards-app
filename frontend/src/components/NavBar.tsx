@@ -3,6 +3,7 @@ import { useAuth } from '../context/authContext';
 import { FaHome, FaFolder, FaPlus } from 'react-icons/fa';
 import { useState } from 'react';
 import Logo from './Logo';
+import { MdLogout } from 'react-icons/md';
 
 const NavBar = () => {
     const location = useLocation();
@@ -20,7 +21,7 @@ const NavBar = () => {
     return (
         <nav className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between px-8 py-4 font-barlow">
             <div className="flex w-full items-center justify-between sm:w-auto sm:justify-start">
-                <Logo className="h-10 min-w-[6rem]" />
+                <Logo className="h-7 min-w-[7rem] max-w-[7rem] sm:h-10" />
 
                 <button
                     onClick={logout}
@@ -29,7 +30,7 @@ const NavBar = () => {
                     Logout
                 </button>
             </div>
-            <div className="flex justify-center text-lg mt-4 sm:mt-0 sm:justify-center w-full">
+            <div className="flex justify-center text-lg mt-8 sm:mt-0 sm:justify-center w-full">
                 {navItems.map(({ to, icon, label }) => {
                     const active = isActive(to);
                     const isHovered = hoveredLink && hoveredLink !== to;
@@ -62,9 +63,9 @@ const NavBar = () => {
             </div>
             <button
                 onClick={logout}
-                className="hidden sm:block font-semibold text-red-black hover:text-red-400"
+                className="font-museo hidden sm:flex items-center gap-2 pr-0 md:pr-6 md:pl-4 font-semibold text-black hover:text-red-400"
             >
-                Logout
+                <MdLogout /> Logout
             </button>
         </nav>
     );
