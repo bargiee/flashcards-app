@@ -109,7 +109,7 @@ export default function FlashcardStudyPage() {
                     <p className="text-center mt-2 font-barlow text-lg">
                         {idx + 1}/{cards.length}
                     </p>
-                    <div className="relative flex justify-center items-center mt-6 gap-2 sm:gap-6 md:gap-16 lg:gap-24">
+                    <div className="relative flex justify-center items-center mt-6 gap-2 sm:gap-6 md:gap-16 lg:gap-24 mb-16">
                         <button
                             onClick={() => handleAnswer(false)}
                             className="flex items-center justify-center w-10 h-16 sm:w-10 sm:h-10 md:w-12 md:h-12

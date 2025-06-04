@@ -53,7 +53,7 @@ export default function StartPage() {
                 />
             </section>
 
-            <section className="mt-20 mb-14 text-center">
+            <section className="mt-14 4xl:mt-20 mb-14 text-center">
                 <p className="font-barlow mb-6 text-sm sm:text-base">
                     Get started today and boost your memory with&nbsp;reMind
                 </p>
