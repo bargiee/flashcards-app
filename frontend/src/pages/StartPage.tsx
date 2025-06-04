@@ -24,7 +24,7 @@ export default function StartPage() {
                 </nav>
             </header>
 
-            <section className="text-center mt-6 4xl:mt-8 px-4">
+            <section className="text-center mt-6 px-4">
                 <h1 className="font-museo text-3xl sm:text-4xl font-bold">
                     Welcome to&nbsp;reMind
                 </h1>
@@ -33,7 +33,7 @@ export default function StartPage() {
                 </p>
             </section>
 
-            <section className="flex flex-col md:flex-row items-center justify-center gap-12 mt-14 4xl:mt-16 px-4">
+            <section className="flex flex-col md:flex-row items-center justify-center gap-12 mt-14 px-4">
                 <FeatureCard
                     icon={<FaRegClock />}
                     title="Spaced repetition"
@@ -53,7 +53,7 @@ export default function StartPage() {
                 />
             </section>
 
-            <section className="mt-14 4xl:mt-20 mb-14 text-center">
+            <section className="mt-14 mb-14 text-center">
                 <p className="font-barlow mb-6 text-sm sm:text-base">
                     Get started today and boost your memory with&nbsp;reMind
                 </p>

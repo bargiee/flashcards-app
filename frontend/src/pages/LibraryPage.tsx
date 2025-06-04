@@ -59,7 +59,7 @@ export default function LibraryPage() {
     return (
         <>
             <NavBar />
-            <div className="max-w-4xl mx-auto px-4 mt-20 mb-20">
+            <div className="max-w-4xl mx-auto px-4 mt-10 2xl:mt-20 mb-20">
                 <h1 className="text-2xl font-medium border-b-4 border-black inline-block mb-14 font-museo">
                     Your library
                 </h1>
