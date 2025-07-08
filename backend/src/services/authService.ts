@@ -22,14 +22,6 @@ const REFRESH_COOKIE_OPTS = {
     path: '/api/auth/refresh',
 };
 
-const accessSignOpts: SignOptions = {
-    expiresIn: ACCESS_EXPIRES_IN,
-};
-
-const refreshSignOpts: SignOptions = {
-    expiresIn: REFRESH_EXPIRES_IN,
-};
-
 export const registerUser = async (username: string, email: string, password: string) => {
     const hash = await bcrypt.hash(password, 10);
     return prisma.user.create({
@@ -37,7 +29,12 @@ export const registerUser = async (username: string, email: string, password: st
     });
 };
 
-export const authenticateUser = (req: Request, res: Response, next: NextFunction) => {
+export const authenticateUser = (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+    remember: boolean
+) => {
     passport.authenticate(
         'local',
         { session: false },
@@ -47,12 +44,22 @@ export const authenticateUser = (req: Request, res: Response, next: NextFunction
                 return res.status(401).json({ message: info?.message || 'Login failed' });
             }
 
-            const accessToken = jwt.sign({ userId: user.id }, ACCESS_SECRET, accessSignOpts);
-            const refreshToken = jwt.sign({ userId: user.id }, REFRESH_SECRET, refreshSignOpts);
+            const accessMaxAge = remember ? ACCESS_EXPIRES_IN : 300; // 5 min
+            const refreshMaxAge = remember ? REFRESH_EXPIRES_IN : 3600; // 1 hour
+
+            const accessToken = jwt.sign({ userId: user.id }, ACCESS_SECRET, {
+                expiresIn: accessMaxAge,
+            });
+            const refreshToken = jwt.sign({ userId: user.id }, REFRESH_SECRET, {
+                expiresIn: refreshMaxAge,
+            });
+
+            const accessCookieOpts = { ...ACCESS_COOKIE_OPTS, maxAge: accessMaxAge * 1000 };
+            const refreshCookieOpts = { ...REFRESH_COOKIE_OPTS, maxAge: refreshMaxAge * 1000 };
 
             return res
-                .cookie('token', accessToken, ACCESS_COOKIE_OPTS)
-                .cookie('refreshToken', refreshToken, REFRESH_COOKIE_OPTS)
+                .cookie('token', accessToken, accessCookieOpts)
+                .cookie('refreshToken', refreshToken, refreshCookieOpts)
                 .status(200)
                 .json({ message: 'Logged in' });
         }
