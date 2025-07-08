@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaPlus } from 'react-icons/fa';
+import { BsArrowUp, BsArrowDown } from 'react-icons/bs';
 import api from '../api';
 import LibraryCard from '../components/LibraryCard';
 import NavBar from '../components/NavBar';
@@ -23,6 +24,8 @@ interface ProgressEntry {
 export default function LibraryPage() {
     const [decks, setDecks] = useState<Deck[]>([]);
     const [progress, setProgress] = useState<ProgressEntry[]>([]);
+    const [isSorted, setIsSorted] = useState(false);
+    const [sortAsc, setSortAsc] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -46,23 +49,50 @@ export default function LibraryPage() {
     }, []);
 
     const getLastReviewedDate = (deckId: number): string | null => {
-        const relevant = progress
+        const dates = progress
             .filter((p) => p.flashcard.deckId === deckId)
-            .map((p) => new Date(p.lastReviewed));
+            .map((p) => p.lastReviewed);
 
-        if (!relevant.length) return null;
+        if (!dates.length) return null;
 
-        const latest = new Date(Math.max(...relevant.map((d) => d.getTime())));
-        return latest.toLocaleDateString();
+        return dates.reduce((latest, cur) => (new Date(cur) > new Date(latest) ? cur : latest));
+    };
+
+    const sortDecksByDate = () => {
+        const getLast = (deckId: number): number => {
+            const relevant = progress
+                .filter((p) => p.flashcard.deckId === deckId)
+                .map((p) => new Date(p.lastReviewed).getTime());
+            return relevant.length ? Math.max(...relevant) : 0;
+        };
+
+        const sorted = [...decks].sort((a, b) => {
+            const aLast = getLast(a.id);
+            const bLast = getLast(b.id);
+            return sortAsc ? aLast - bLast : bLast - aLast;
+        });
+
+        setDecks(sorted);
+        setSortAsc((prev) => !prev);
+        setIsSorted(true);
     };
 
     return (
         <>
             <NavBar />
-            <div className="max-w-4xl mx-auto px-4 mt-10 2xl:mt-20 mb-20">
-                <h1 className="text-2xl font-medium border-b-4 border-black inline-block mb-14 font-museo">
-                    Your library
-                </h1>
+            <div className="max-w-5xl mx-auto px-4 mt-10 2xl:mt-20 mb-20">
+                <div className="flex items-center justify-between mb-14">
+                    <h1 className="text-2xl font-medium border-b-4 border-black inline-block font-museo">
+                        Your library
+                    </h1>
+                    <button
+                        onClick={sortDecksByDate}
+                        className="ml-4 flex gap-1 items-center text-sm font-normal text-black hover:text-yellow-500"
+                    >
+                        Sort by last reviewed{' '}
+                        {isSorted && (sortAsc ? <BsArrowDown /> : <BsArrowUp />)}
+                    </button>
+                </div>
 
                 {decks.map((deck) => (
                     <LibraryCard
@@ -70,6 +100,7 @@ export default function LibraryPage() {
                         title={deck.name}
                         termsCount={deck.flashcards?.length || 0}
                         lastReviewed={getLastReviewedDate(deck.id) || 'Never reviewed'}
+                        createdAt={deck.createdAt}
                         onClick={() => navigate(`/sets/${deck.id}`)}
                     />
                 ))}
