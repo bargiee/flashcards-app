@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
 import { FaEnvelope, FaLock } from 'react-icons/fa';
 import LoginBox from '../assets/LoginBox.svg';
@@ -19,7 +19,7 @@ const LoginPage = () => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         try {
-            await login(email, password);
+            await login(email, password, remember);
         } catch {
             toast.error('Invalid credentials');
         }

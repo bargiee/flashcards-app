@@ -15,8 +15,10 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
     }
 };
 
-export const login = (req: Request, res: Response, next: NextFunction) =>
-    service.authenticateUser(req, res, next);
+export const login = (req: Request, res: Response, next: NextFunction) => {
+    const remember = req.body.remember === true;
+    service.authenticateUser(req, res, next, remember);
+};
 
 export const refresh = (req: Request, res: Response, next: NextFunction) => {
     try {

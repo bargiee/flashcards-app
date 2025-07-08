@@ -11,7 +11,7 @@ interface AuthContextType {
     user: User | null;
     isAuthenticated: boolean;
     isChecking: boolean;
-    login: (email: string, password: string) => Promise<void>;
+    login: (email: string, password: string, remember?: boolean) => Promise<void>;
     register: (u: string, e: string, p: string) => Promise<void>;
     logout: () => Promise<void>;
     refetch: () => Promise<void>;
@@ -40,8 +40,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
     };
 
-    const login = async (email: string, password: string) => {
-        await api.post('/auth/login', { email, password });
+    const login = async (email: string, password: string, remember = false) => {
+        await api.post('/auth/login', { email, password, remember });
         await fetchUser();
     };
 
