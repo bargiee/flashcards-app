@@ -1,5 +1,6 @@
 import { TbRefresh } from 'react-icons/tb';
 import { BsArrowLeft } from 'react-icons/bs';
+import { StatBar } from './StatBar';
 
 interface Props {
     known: number;
@@ -12,10 +13,6 @@ export default function StudySummary({ known, stillLearning, onRestart, onBack }
     const total = known + stillLearning;
     const percent = total ? Math.round((known / total) * 100) : 0;
 
-    const donutStyle = {
-        background: `conic-gradient(#10b981 ${percent}%, #f97316 0)`,
-    };
-
     return (
         <div className="max-w-xl mx-auto mt-20 text-center px-4">
             <h1 className="font-museo text-xl font-semibold mb-12 py-3 rounded-xl bg-black text-white ">
@@ -23,7 +20,12 @@ export default function StudySummary({ known, stillLearning, onRestart, onBack }
             </h1>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-12 mb-12">
                 <div className="flex flex-col items-center gap-4">
-                    <div className="relative w-40 h-40 rounded-full" style={donutStyle}>
+                    <div
+                        className="relative w-40 h-40 rounded-full"
+                        style={{
+                            background: `conic-gradient(#10b981 ${percent}%, #f97316 0)`,
+                        }}
+                    >
                         <div className="absolute inset-4 rounded-full bg-white flex items-center justify-center font-museo text-xl">
                             {percent}%
                         </div>
@@ -57,18 +59,6 @@ export default function StudySummary({ known, stillLearning, onRestart, onBack }
                         <BsArrowLeft /> Back to library
                     </button>
                 </div>
-            </div>
-        </div>
-    );
-}
-
-function StatBar({ label, value, color }: { label: string; value: number; color: string }) {
-    return (
-        <div className="flex items-center gap-3 mb-1">
-            <span className={`w-3 h-3 rounded-full ${color}`} />
-            <div className="flex-1 flex justify-between items-center">
-                <span className="font-barlow text-sm">{label}</span>
-                <span className="font-semibold">{value}</span>
             </div>
         </div>
     );
