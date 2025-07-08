@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api';
 import { FaTrash, FaPlus } from 'react-icons/fa';
+import { FiTrash } from 'react-icons/fi';
+import { FiRotateCw } from 'react-icons/fi';
 import { LuDownload } from 'react-icons/lu';
 import { MdEdit } from 'react-icons/md';
 import toast from 'react-hot-toast';
@@ -81,6 +83,16 @@ export default function FlashcardSetDetailsPage() {
         }
     };
 
+    const handleResetProgress = async () => {
+        if (!id || !window.confirm('Reset all progress for this set?')) return;
+        try {
+            await api.delete(`/progress/deck/${id}`);
+            toast.success('Progress reset!');
+        } catch {
+            toast.error('Could not reset progress');
+        }
+    };
+
     return (
         <>
             <NavBar />
@@ -106,7 +118,11 @@ export default function FlashcardSetDetailsPage() {
                         ) : (
                             <h1 className="font-museo text-lg sm:text-xl font-normal flex-1">
                                 {name || 'Untitled'}
-                                <button onClick={() => setEditing(true)} className="ml-3 text-lg">
+                                <button
+                                    onClick={() => setEditing(true)}
+                                    className="ml-3 text-lg"
+                                    title="Edit title"
+                                >
                                     <MdEdit />
                                 </button>
                             </h1>
@@ -114,10 +130,18 @@ export default function FlashcardSetDetailsPage() {
 
                         <div className="flex items-center gap-4">
                             <button
-                                onClick={deleteDeck}
-                                className="text-gray-500 hover:text-yellow-400 text-lg"
+                                onClick={handleResetProgress}
+                                className="ml-3 text-lg text-gray-300 hover:text-red-400"
+                                title="Reset progress"
                             >
-                                <FaTrash />
+                                <FiRotateCw />
+                            </button>
+                            <button
+                                onClick={deleteDeck}
+                                className="text-gray-300 hover:text-red-400 text-lg"
+                                title="Delete"
+                            >
+                                <FiTrash />
                             </button>
                             <button
                                 onClick={exportCsv}
