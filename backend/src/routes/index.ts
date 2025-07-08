@@ -17,7 +17,7 @@ router.use(passport.authenticate('jwt', { session: false }));
 router.use('/users', userRoutes);
 router.use('/decks', deckRoutes);
 router.use('/flashcards', flashcardRoutes);
-router.use('/favorite-decks', favoriteDeckRoutes);
+router.use('/favorites', favoriteDeckRoutes);
 router.use('/progress', progressRoutes);
 router.use('/import', importRoutes);
 
