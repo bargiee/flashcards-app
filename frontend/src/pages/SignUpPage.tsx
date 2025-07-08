@@ -40,7 +40,6 @@ export default function SignUpPage() {
             await register(username, email, password);
             navigate('/home');
         } catch (err: any) {
-            console.error(err);
             toast.error('Registration failed');
         } finally {
             setLoading(false);

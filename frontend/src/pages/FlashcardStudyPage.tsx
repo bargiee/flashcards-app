@@ -20,8 +20,8 @@ const sendProgress = async (flashcardId: number, known: boolean) => {
             flashcardId,
             known,
         });
-    } catch (err) {
-        console.error('progress save failed', err);
+    } catch {
+        toast.error('Progress save failed');
     }
 };
 

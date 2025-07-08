@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import LibraryCard from '../components/LibraryCard';
 import NavBar from '../components/NavBar';
+import toast from 'react-hot-toast';
 import { FiPlus } from 'react-icons/fi';
 import { BsArrowUp, BsArrowDown } from 'react-icons/bs';
+import { HiArrowsUpDown } from 'react-icons/hi2';
 
 interface Deck {
     id: number;
@@ -33,8 +35,8 @@ export default function LibraryPage() {
             try {
                 const { data } = await api.get<Deck[]>('/decks');
                 setDecks(data);
-            } catch (err) {
-                console.error('Error fetching decks:', err);
+            } catch {
+                toast.error('Error fetching data');
             }
         })();
 
@@ -42,8 +44,8 @@ export default function LibraryPage() {
             try {
                 const { data } = await api.get<ProgressEntry[]>('/progress/user');
                 setProgress(data);
-            } catch (err) {
-                console.error('Error fetching progress:', err);
+            } catch {
+                toast.error('Error fetching data');
             }
         })();
     }, []);
@@ -89,8 +91,8 @@ export default function LibraryPage() {
                         onClick={sortDecksByDate}
                         className="ml-4 flex gap-1 items-center text-sm font-normal text-black hover:text-yellow-500"
                     >
-                        Sort by last reviewed{' '}
-                        {isSorted && (sortAsc ? <BsArrowDown /> : <BsArrowUp />)}
+                        Sort by last reviewed
+                        {!isSorted ? <HiArrowsUpDown /> : sortAsc ? <BsArrowDown /> : <BsArrowUp />}
                     </button>
                 </div>
 
