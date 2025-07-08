@@ -1,4 +1,4 @@
-import { FaTrash } from 'react-icons/fa';
+import { FiTrash } from 'react-icons/fi';
 
 interface Props {
     index: number;
@@ -14,7 +14,7 @@ const FlashcardInput = ({ index, term, definition, onChange, onDelete }: Props) 
             <div className="flex justify-between items-center mb-4">
                 <span className="font-bold">{index + 1}</span>
                 <button onClick={onDelete} className="text-gray-600 hover:text-yellow-400">
-                    <FaTrash />
+                    <FiTrash />
                 </button>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">

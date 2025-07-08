@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { FaPlus } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import api from '../api';
 import FlashcardInput from '../components/FlashcardInput';
 import NavBar from '../components/NavBar';
 import { useNavigate } from 'react-router-dom';
+import { FiPlus } from 'react-icons/fi';
 
 export default function CreateSetPage() {
     const [title, setTitle] = useState('');
@@ -142,7 +142,7 @@ export default function CreateSetPage() {
                         onClick={handleAddCard}
                         className="bg-yellow-400 hover:bg-yellow-500 text-black p-3 rounded-full text-lg"
                     >
-                        <FaPlus />
+                        <FiPlus />
                     </button>
                 </div>
             </div>

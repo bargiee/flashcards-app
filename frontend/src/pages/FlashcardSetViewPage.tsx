@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import api from '../api';
-import { FaEdit, FaStar } from 'react-icons/fa';
-import { TbCardsFilled } from 'react-icons/tb';
 import toast from 'react-hot-toast';
 import NavBar from '../components/NavBar';
+import { IoReturnUpBack } from 'react-icons/io5';
+import { FiStar } from 'react-icons/fi';
+import { BsPencilSquare } from 'react-icons/bs';
+import { TbCardsFilled } from 'react-icons/tb';
 
 interface Flashcard {
     id: number;
@@ -90,8 +92,11 @@ export default function FlashcardSetEditPage() {
         <>
             <NavBar />
             <div className="max-w-4xl mx-auto px-4 py-10 mt-20 mb-20">
-                <Link to="/library" className="text-md text-gray-400 hover:text-black block">
-                    &lt; back to library
+                <Link
+                    to="/library"
+                    className="text-md text-gray-400 hover:text-black flex items-center gap-2"
+                >
+                    <IoReturnUpBack /> back to library
                 </Link>
 
                 <div className="sticky top-0 z-10 bg-white pt-4 pb-6 -mx-4 px-4 mb-10">
@@ -103,7 +108,7 @@ export default function FlashcardSetEditPage() {
                                 className="ml-8 text-lg text-gray-300 hover:text-yellow-400"
                                 title="Edit"
                             >
-                                <FaEdit />
+                                <BsPencilSquare />
                             </button>
                             <button
                                 onClick={toggleFavorite}
@@ -114,11 +119,11 @@ export default function FlashcardSetEditPage() {
                                 }`}
                                 title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
                             >
-                                <FaStar />
+                                <FiStar />
                             </button>
                             {accuracy !== null && (
                                 <div
-                                    className="relative ml-8 w-6 h-6 rounded-full shrink-0"
+                                    className="relative ml-8 w-5 h-5 rounded-full shrink-0"
                                     style={{
                                         background: `conic-gradient(${
                                             accuracy >= 70
@@ -126,11 +131,11 @@ export default function FlashcardSetEditPage() {
                                                 : accuracy >= 30
                                                 ? '#f97316'
                                                 : '#ef4444'
-                                        } ${accuracy}%, #e5e7eb 0%)`,
+                                        } ${accuracy}%, #d1d5db 0%)`,
                                     }}
                                     title={`Correct answers: ${accuracy}%`}
                                 >
-                                    <div className="absolute inset-1 rounded-full bg-black" />
+                                    <div className="absolute inset-[3px] rounded-full bg-black" />
                                 </div>
                             )}
                         </h1>

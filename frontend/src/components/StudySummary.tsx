@@ -1,6 +1,6 @@
+import { StatBar } from './StatBar';
 import { TbRefresh } from 'react-icons/tb';
 import { BsArrowLeft } from 'react-icons/bs';
-import { StatBar } from './StatBar';
 
 interface Props {
     known: number;

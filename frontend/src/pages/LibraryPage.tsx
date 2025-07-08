@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaPlus } from 'react-icons/fa';
-import { BsArrowUp, BsArrowDown } from 'react-icons/bs';
 import api from '../api';
 import LibraryCard from '../components/LibraryCard';
 import NavBar from '../components/NavBar';
+import { FiPlus } from 'react-icons/fi';
+import { BsArrowUp, BsArrowDown } from 'react-icons/bs';
 
 interface Deck {
     id: number;
@@ -110,7 +110,7 @@ export default function LibraryPage() {
                         className="bg-yellow-400 hover:bg-yellow-500 text-black p-3 rounded-full text-lg"
                         onClick={() => (window.location.href = '/create')}
                     >
-                        <FaPlus />
+                        <FiPlus />
                     </button>
                 </div>
             </div>

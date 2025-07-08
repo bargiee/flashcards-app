@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../api';
-import { FaTrash, FaPlus } from 'react-icons/fa';
-import { FiTrash } from 'react-icons/fi';
-import { FiRotateCw } from 'react-icons/fi';
-import { LuDownload } from 'react-icons/lu';
-import { MdEdit } from 'react-icons/md';
 import toast from 'react-hot-toast';
 import NavBar from '../components/NavBar';
 import { downloadCsvFile } from '../utils/exportCsv';
+import { RiPencilFill } from 'react-icons/ri';
+import { IoReturnUpBack } from 'react-icons/io5';
+import { FiTrash, FiPlus } from 'react-icons/fi';
+import { FiRotateCw } from 'react-icons/fi';
+import { LuDownload } from 'react-icons/lu';
 
 interface Flashcard {
     id?: number;
@@ -100,9 +100,9 @@ export default function FlashcardSetDetailsPage() {
             <div className="max-w-4xl mx-auto px-4 py-10 mt-20 mb-20">
                 <button
                     onClick={() => navigate(-1)}
-                    className="text-md text-gray-400 hover:text-black block"
+                    className="flex text-md text-gray-400 hover:text-black items-center gap-2"
                 >
-                    &lt; back
+                    <IoReturnUpBack /> back
                 </button>
 
                 <div className="sticky top-0 z-10 bg-white pt-4 pb-6 -mx-4 px-4 mb-10">
@@ -120,10 +120,10 @@ export default function FlashcardSetDetailsPage() {
                                 {name || 'Untitled'}
                                 <button
                                     onClick={() => setEditing(true)}
-                                    className="ml-3 text-lg"
+                                    className="ml-3 text-lg text-gray-300 hover:text-yellow-500"
                                     title="Edit title"
                                 >
-                                    <MdEdit />
+                                    <RiPencilFill />
                                 </button>
                             </h1>
                         )}
@@ -145,7 +145,7 @@ export default function FlashcardSetDetailsPage() {
                             </button>
                             <button
                                 onClick={exportCsv}
-                                className="flex items-center gap-1 border border-yellow-400 text-yellow-400 font-medium px-5 py-1.5 rounded-xl hover:bg-yellow-500 hover:text-black transition"
+                                className="flex items-center gap-2 border border-yellow-400 text-yellow-400 font-medium px-5 py-1.5 rounded-xl hover:bg-yellow-500 hover:text-black transition"
                             >
                                 <LuDownload />
                                 Export CSV
@@ -195,7 +195,7 @@ export default function FlashcardSetDetailsPage() {
                                         onClick={() => removeCard(idx)}
                                         className="text-gray-600 hover:text-yellow-400"
                                     >
-                                        <FaTrash />
+                                        <FiTrash />
                                     </button>
                                 </div>
                             ))}
@@ -206,7 +206,7 @@ export default function FlashcardSetDetailsPage() {
                                 onClick={addCard}
                                 className="bg-yellow-400 hover:bg-yellow-500 text-black p-3 rounded-full text-lg"
                             >
-                                <FaPlus />
+                                <FiPlus />
                             </button>
                         </div>
                     </>

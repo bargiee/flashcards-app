@@ -1,9 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
-import { FaHome, FaFolder, FaPlus } from 'react-icons/fa';
 import { useState } from 'react';
 import Logo from './Logo';
 import { MdLogout } from 'react-icons/md';
+import { FaFolder, FaPlus } from 'react-icons/fa';
+import { RiHome2Fill } from 'react-icons/ri';
 
 const NavBar = () => {
     const location = useLocation();
@@ -13,7 +14,7 @@ const NavBar = () => {
     const isActive = (path: string) => location.pathname === path;
 
     const navItems = [
-        { to: '/home', icon: <FaHome />, label: 'Home' },
+        { to: '/home', icon: <RiHome2Fill />, label: 'Home' },
         { to: '/library', icon: <FaFolder />, label: 'Library' },
         { to: '/create', icon: <FaPlus className="text-sm" />, label: 'Create new' },
     ];

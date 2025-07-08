@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { FaRegClock, FaChartLine, FaLaptop } from 'react-icons/fa';
 import { FeatureCard } from '../components/FeatureCard';
 import Logo from '../components/Logo';
+import { FaRegClock, FaChartLine, FaLaptop } from 'react-icons/fa';
 
 export default function StartPage() {
     return (

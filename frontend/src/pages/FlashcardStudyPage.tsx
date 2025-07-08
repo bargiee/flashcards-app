@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import api from '../api';
 import NavBar from '../components/NavBar';
-import { FaTimes, FaCheck } from 'react-icons/fa';
-import { RiCloseLargeLine } from 'react-icons/ri';
 import toast from 'react-hot-toast';
 import Flashcard from '../components/Flashcard';
 import StudySummary from '../components/StudySummary';
+import { FaTimes, FaCheck } from 'react-icons/fa';
+import { RiCloseLargeLine } from 'react-icons/ri';
 
 interface Flashcard {
     id: number;

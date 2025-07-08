@@ -1,10 +1,10 @@
 import { FormEvent, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/authContext';
-import { FaEnvelope, FaLock } from 'react-icons/fa';
 import LoginBox from '../assets/LoginBox.svg';
 import Logo from '../components/Logo';
 import toast from 'react-hot-toast';
+import { FaEnvelope, FaLock } from 'react-icons/fa';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
