@@ -42,3 +42,17 @@ export const deleteProgress = async (req: Request, res: Response, next: NextFunc
         return next(e);
     }
 };
+
+export const resetDeckProgress = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const userId = (req.user as any).id;
+        const deckId = Number(req.params.deckId);
+        await service.resetDeck(userId, deckId);
+        return res.status(200).json({ message: 'Progress reset' });
+    } catch (e: any) {
+        if (e.message === 'NOT_FOUND') {
+            return next(new HttpError(404, 'Deck not found'));
+        }
+        return next(e);
+    }
+};

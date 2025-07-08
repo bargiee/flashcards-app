@@ -20,3 +20,9 @@ export const deleteProgress = async (userId: number, id: number) => {
 
     return repo.remove(id);
 };
+
+export const resetDeck = async (userId: number, deckId: number) => {
+    const deck = await repo.findByIdAndUser(deckId, userId);
+    if (!deck) throw new Error('NOT_FOUND');
+    return repo.removeByDeck(userId, deckId);
+};

@@ -3,6 +3,7 @@ import {
     getProgressByUser,
     createOrUpdateProgress,
     deleteProgress,
+    resetDeckProgress,
 } from '../controllers/progressController';
 
 const router = Router();
@@ -106,5 +107,43 @@ router.post('/', createOrUpdateProgress);
  *         $ref: '#/components/responses/ServerError'
  */
 router.delete('/:id', deleteProgress);
+
+/**
+ * @swagger
+ * /api/progress/deck/{deckId}:
+ *   delete:
+ *     summary: Reset progress for all flashcards in a specific deck
+ *     tags:
+ *       - Progress
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: deckId
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: Numeric ID of the deck to reset progress for
+ *     responses:
+ *       200:
+ *         description: Progress for the deck reset successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Progress for deck 5 has been reset"
+ *       404:
+ *         description: Deck or progress not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       500:
+ *         $ref: '#/components/responses/ServerError'
+ */
+router.delete('/deck/:deckId', resetDeckProgress);
 
 export default router;

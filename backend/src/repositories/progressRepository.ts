@@ -39,3 +39,11 @@ export const findByIdAndUser = (id: number, userId: number) =>
     prisma.progress.findFirst({ where: { id, userId } });
 
 export const remove = (id: number) => prisma.progress.delete({ where: { id } });
+
+export const removeByDeck = (userId: number, deckId: number) =>
+    prisma.progress.deleteMany({
+        where: {
+            userId,
+            flashcard: { deckId },
+        },
+    });
