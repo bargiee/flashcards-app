@@ -7,6 +7,9 @@ module.exports = {
                 museo: ['"MuseoModerno"', 'sans-serif'],
                 roboto: ['Roboto', 'sans-serif'],
             },
+            screens: {
+                smPlus: '700px',
+            },
         },
     },
     plugins: [],

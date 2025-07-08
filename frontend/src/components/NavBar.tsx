@@ -20,18 +20,18 @@ const NavBar = () => {
     ];
 
     return (
-        <nav className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between px-8 py-4 font-barlow">
-            <div className="flex w-full items-center justify-between sm:w-auto sm:justify-start">
-                <Logo className="h-7 min-w-[7rem] max-w-[7rem] sm:h-10" />
+        <nav className="relative flex flex-col smPlus:flex-row smPlus:items-center smPlus:justify-between px-8 py-4 font-barlow">
+            <div className="flex w-full items-center justify-between smPlus:w-auto smPlus:justify-start">
+                <Logo className="h-7 min-w-[7rem] max-w-[7rem] smPlus:h-10" />
 
                 <button
                     onClick={logout}
-                    className="font-semibold text-red-black hover:text-red-400 sm:hidden"
+                    className="font-semibold font-museo text-red-black hover:text-red-400 smPlus:hidden flex gap-2 items-center"
                 >
-                    Logout
+                    <MdLogout /> Logout
                 </button>
             </div>
-            <div className="flex justify-center text-lg mt-8 sm:mt-0 sm:justify-center w-full">
+            <div className="flex justify-center text-lg mt-8 smPlus:mt-0 smPlus:justify-center w-full">
                 {navItems.map(({ to, icon, label }) => {
                     const active = isActive(to);
                     const isHovered = hoveredLink && hoveredLink !== to;
@@ -41,7 +41,7 @@ const NavBar = () => {
 
                     const activeClasses =
                         active && !isHovered
-                            ? 'bg-yellow-400 text-black px-8 py-1 whitespace-nowrap sm:px-8 md:px-12 lg:px-16'
+                            ? 'bg-yellow-400 text-black px-8 py-1 whitespace-nowrap smPlus:px-8 md:px-12 lg:px-16'
                             : '';
 
                     const hoverClasses = !active
@@ -64,7 +64,7 @@ const NavBar = () => {
             </div>
             <button
                 onClick={logout}
-                className="font-museo hidden sm:flex items-center gap-2 pr-0 md:pr-6 md:pl-4 font-semibold text-black hover:text-red-400"
+                className="font-museo hidden smPlus:flex items-center gap-2 pr-0 md:pr-6 md:pl-4 font-semibold text-black hover:text-red-400"
             >
                 <MdLogout /> Logout
             </button>
