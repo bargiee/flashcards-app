@@ -28,7 +28,7 @@ const router = Router();
  *       500:
  *         $ref: '#/components/responses/ServerError'
  */
-router.get('/:userId', getFavoriteDecksByUser);
+router.get('/', getFavoriteDecksByUser);
 
 /**
  * @swagger
