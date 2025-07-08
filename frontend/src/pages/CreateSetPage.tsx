@@ -53,7 +53,6 @@ export default function CreateSetPage() {
             toast.success('Deck created!');
             navigate('/library');
         } catch (err) {
-            console.error(err);
             toast.error('Error creating deck');
         }
     };
@@ -92,7 +91,7 @@ export default function CreateSetPage() {
     return (
         <>
             <NavBar />
-            <div className="max-w-4xl mx-auto px-4 mt-20 mb-20">
+            <div className="max-w-5xl mx-auto px-4 mt-20 mb-20">
                 <h1 className="text-2xl font-medium border-b-4 border-black inline-block mb-10 font-museo">
                     Create a new flashcard set
                 </h1>
