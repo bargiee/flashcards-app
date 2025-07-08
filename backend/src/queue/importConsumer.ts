@@ -30,6 +30,4 @@ export async function startImportConsumer() {
             channel.nack(msg, false, false);
         }
     });
-
-    console.log('Import consumer is running');
 }
