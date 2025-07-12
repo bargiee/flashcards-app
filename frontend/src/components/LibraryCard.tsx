@@ -9,7 +9,9 @@ interface Props {
 const formatDaysAgo = (date: string | null): string => {
     if (!date) return 'Never';
 
-    const diffDays = Math.floor((Date.now() - new Date(date).getTime()) / 86400000);
+    const diffMs = Date.now() - new Date(date).getTime();
+    const diffDays = Math.floor(Math.max(diffMs, 0) / 86400000);
+
     if (isNaN(diffDays)) return 'Never';
     if (diffDays === 0) return 'Today';
     if (diffDays === 1) return '1 day ago';
