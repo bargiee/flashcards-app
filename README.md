@@ -6,13 +6,13 @@ A full-stack flashcard learning application allowing users to create, manage, an
 
 ## Project Description
 
-Remind is a flashcard-based learning app designed to help users retain information through spaced repetition. It is designed for learners who want an efficient and easy way to review and memorize content. This application supports user authentication, personalized deck creation, flashcard studying, and tracking learning progress.
+Remind is a flashcard-based learning app designed. It is designed for learners who want an efficient and easy way to review and memorize content. The application supports user authentication, deck creation and management, study mode, and learning progress tracking.
 
 The project is implemented as a containerized full-stack web app:
 
 -   **Backend**: RESTful API built with Node.js, Express, PostgreSQL, Prisma, and JWT-based authentication.
 -   **Frontend**: Built using React, Vite, and Tailwind CSS. Features include route protection, responsive design, and a simple study interface optimized for usability.
--   **Infrastructure**: Dockerized services orchestrated via Docker Compose. Includes PostgreSQL, RabbitMQ for background processing, and a dedicated worker container for asynchronous tasks.
+-   **Infrastructure**: Dockerized services orchestrated with Docker Compose. Includes PostgreSQL, RabbitMQ for background processing, and a dedicated worker container for asynchronous tasks.
 
 ---
 
@@ -27,7 +27,41 @@ The project is implemented as a containerized full-stack web app:
 
 ---
 
-## Database Schema
+## Preview
+
+#### Start Page
+
+![Study Mode](./assets/screenshots/start.png)
+
+#### Login Page
+
+![Study Mode](./assets/screenshots/login.png)
+
+#### Homepage
+
+![Homepage](./assets/screenshots/homepage.png)
+
+#### Library View
+
+![Library](./assets/screenshots/library.png)
+
+#### Create Set
+
+![Study Mode](./assets/screenshots/create.png)
+
+#### Set View
+
+![Study Mode](./assets/screenshots/set-view.png)
+
+#### Flashcard Study Mode
+
+![Study Mode](./assets/screenshots/study.png)
+
+#### Study Summary
+
+![Study Mode](./assets/screenshots/summary.png)
+
+### Database Schema
 
 ![Database Schema](./diagramERD.png)
 
