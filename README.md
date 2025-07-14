@@ -63,7 +63,7 @@ The project is implemented as a containerized full-stack web app:
 
 ### Database Schema
 
-![Database Schema](./diagramERD.png)
+![Database Schema](./assets/diagramERD.png)
 
 ---
 
@@ -80,8 +80,8 @@ Open your terminal or command prompt.
 Use Git to clone the project repository to your local machine.
 
 ```bash
-git clone github.com/bargiee/ztpai.git
-cd ztpai  # Navigate into the project directory
+git clone github.com/bargiee/flashcards-app.git
+cd flashcards-app  # Navigate into the project directory
 ```
 
 ### 2. Configure Environment Variables
