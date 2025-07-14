@@ -4,6 +4,7 @@ import api from '../api';
 import NavBar from '../components/NavBar';
 import LibraryCard from '../components/LibraryCard';
 import RecentFlashcard from '../components/RecentFlashcard';
+import { lastReviewedAt } from '../utils/date';
 import toast from 'react-hot-toast';
 
 interface Deck {
@@ -44,11 +45,6 @@ export default function HomePage() {
         })();
     }, []);
 
-    const lastReviewedAt = (deckId: number): number =>
-        progress
-            .filter((p) => p.flashcard.deckId === deckId)
-            .reduce((latest, cur) => Math.max(latest, new Date(cur.lastReviewed).getTime()), 0);
-
     const accuracyOf = (deckId: number): number => {
         const stats = progress.filter((p) => p.flashcard.deckId === deckId);
         const known = stats.reduce((sum, p) => sum + p.successCount, 0);
@@ -59,8 +55,8 @@ export default function HomePage() {
     const recentDecks = useMemo(
         () =>
             [...decks]
-                .filter((d) => lastReviewedAt(d.id))
-                .sort((a, b) => lastReviewedAt(b.id) - lastReviewedAt(a.id))
+                .filter((d) => lastReviewedAt(d.id, progress))
+                .sort((a, b) => lastReviewedAt(b.id, progress) - lastReviewedAt(a.id, progress))
                 .slice(0, 6),
         [decks, progress]
     );
@@ -107,9 +103,9 @@ export default function HomePage() {
                                 title={deck.name}
                                 termsCount={deck.flashcards.length}
                                 lastReviewed={
-                                    lastReviewedAt(deck.id)
-                                        ? new Date(lastReviewedAt(deck.id)).toLocaleDateString()
-                                        : 'Never reviewed'
+                                    lastReviewedAt(deck.id, progress)
+                                        ? new Date(lastReviewedAt(deck.id, progress)).toISOString()
+                                        : null
                                 }
                                 createdAt={deck.createdAt}
                                 onClick={() => navigate(`/sets/${deck.id}`)}

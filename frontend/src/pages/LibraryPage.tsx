@@ -4,6 +4,7 @@ import api from '../api';
 import LibraryCard from '../components/LibraryCard';
 import NavBar from '../components/NavBar';
 import toast from 'react-hot-toast';
+import { lastReviewedAt } from '../utils/date';
 import { FiPlus } from 'react-icons/fi';
 import { BsArrowUp, BsArrowDown } from 'react-icons/bs';
 import { HiArrowsUpDown } from 'react-icons/hi2';
@@ -50,23 +51,8 @@ export default function LibraryPage() {
         })();
     }, []);
 
-    const getLastReviewedDate = (deckId: number): string | null => {
-        const dates = progress
-            .filter((p) => p.flashcard.deckId === deckId)
-            .map((p) => p.lastReviewed);
-
-        if (!dates.length) return null;
-
-        return dates.reduce((latest, cur) => (new Date(cur) > new Date(latest) ? cur : latest));
-    };
-
     const sortDecksByDate = () => {
-        const getLast = (deckId: number): number => {
-            const relevant = progress
-                .filter((p) => p.flashcard.deckId === deckId)
-                .map((p) => new Date(p.lastReviewed).getTime());
-            return relevant.length ? Math.max(...relevant) : 0;
-        };
+        const getLast = (deckId: number) => lastReviewedAt(deckId, progress);
 
         const sorted = [...decks].sort((a, b) => {
             const aLast = getLast(a.id);
@@ -101,7 +87,11 @@ export default function LibraryPage() {
                         key={deck.id}
                         title={deck.name}
                         termsCount={deck.flashcards?.length || 0}
-                        lastReviewed={getLastReviewedDate(deck.id) || 'Never reviewed'}
+                        lastReviewed={
+                            lastReviewedAt(deck.id, progress)
+                                ? new Date(lastReviewedAt(deck.id, progress)).toISOString()
+                                : null
+                        }
                         createdAt={deck.createdAt}
                         onClick={() => navigate(`/sets/${deck.id}`)}
                     />

@@ -1,22 +1,12 @@
+import { daysAgo } from '../utils/date';
+
 interface Props {
     title: string;
     termsCount: number;
-    lastReviewed: string;
+    lastReviewed: string | null;
     createdAt: string;
     onClick?: () => void;
 }
-
-const formatDaysAgo = (date: string | null): string => {
-    if (!date) return 'Never';
-
-    const diffMs = Date.now() - new Date(date).getTime();
-    const diffDays = Math.floor(Math.max(diffMs, 0) / 86400000);
-
-    if (isNaN(diffDays)) return 'Never';
-    if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return '1 day ago';
-    return `${diffDays} days ago`;
-};
 
 const LibraryCard = ({ title, termsCount, lastReviewed, onClick, createdAt }: Props) => {
     return (
@@ -33,7 +23,7 @@ const LibraryCard = ({ title, termsCount, lastReviewed, onClick, createdAt }: Pr
                         Created: {new Date(createdAt).toLocaleDateString()}
                     </span>
                     <span className="text-gray-400 font-extralight col-start-1 row-start-2">
-                        Last reviewed: {formatDaysAgo(lastReviewed)}
+                        Last reviewed: {daysAgo(lastReviewed)}
                     </span>
                     <span className="text-gray-800 font-semibold col-start-2 row-start-2 justify-self-end">
                         {termsCount} terms
