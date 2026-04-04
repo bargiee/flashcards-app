@@ -125,7 +125,7 @@ Then access:
 -   Frontend: [http://localhost:5173](http://localhost:5173)
 -   Backend API: [http://localhost:8080/api](http://localhost:8080/api)
 -   Swagger UI: [http://localhost:8080/api/docs](http://localhost:8080/api/docs)
--   RabbitMQ Dashboard: [http://localhost:15672](http://localhost:15672) — Login: `guest` / `guest`
+-   RabbitMQ Dashboard: [http://localhost:15672](http://localhost:15672) - Login: `guest` / `guest`
 
 ---
 
@@ -140,4 +140,4 @@ Then access:
 -   **RabbitMQ**
 
     -   Used for handling asynchronous CSV import jobs to prevent API delays.
-    -   Management UI available at [http://localhost:15672](http://localhost:15672) — login using `guest` / `guest`.
+    -   Management UI available at [http://localhost:15672](http://localhost:15672) - login using `guest` / `guest`.
