@@ -129,45 +129,6 @@ Then access:
 
 ---
 
-## Technologies Used
-
--   **Node.js**
-
-    -   A JavaScript runtime environment for executing server-side code.
-    -   Its non-blocking, event-driven architecture makes it efficient for handling many requests at once. It is widely used and helps build scalable backend applications.
-
--   **Express**
-
-    -   A fast and minimalist web framework for Node.js.
-    -   Provides essential HTTP methods, middleware support, and routing tools, making backend development structured and productive.
-
--   **PostgreSQL**
-
-    -   A powerful, open-source object-relational database system.
-    -   Reliable, ACID-compliant, and well-supported in ORMs like Prisma. Suitable for structured data and relational queries.
-
--   **Prisma**
-
-    -   A type-safe ORM for Node.js and TypeScript.
-    -   Helps with database modeling and migrations, improves developer productivity, and prevents runtime errors through static typing.
-
--   **React**
-
-    -   A JavaScript library for building user interfaces.
-    -   Encourages reusable components and supports reactive UIs, helping deliver smooth, maintainable frontend experiences.
-
--   **Tailwind CSS**
-
-    -   A utility-first CSS framework.
-    -   Enables fast UI development with predefined classes, promotes design consistency, and avoids unnecessary complexity in stylesheets.
-
--   **Docker & Docker Compose**
-
-    -   Tools for containerizing and orchestrating application services.
-    -   Docker Compose simplifies running the application by defining all services in a single configuration file. It ensures consistent environments, streamlines setup, and makes managing dependencies and updates more efficient.
-
----
-
 ## Additional Notes
 
 -   **API Documentation**
