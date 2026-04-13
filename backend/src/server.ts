@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -14,26 +14,31 @@ dotenv.config();
 
 const app = express();
 
+const PORT = process.env.PORT || 8080;
+const CORS_ORIGIN = process.env.CORS_ORIGIN || 'http://localhost:5173';
+
 app.use(
     cors({
-        origin: 'http://localhost:5173',
+        origin: CORS_ORIGIN,
         credentials: true,
-    })
+    }),
 );
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(passport.initialize());
 
+app.get('/health', (_req, res) => {
+    res.status(200).json({ status: 'ok' });
+});
+
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 app.use('/api', routes);
-
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 startImportConsumer().catch((err) => {

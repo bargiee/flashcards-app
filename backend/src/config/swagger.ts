@@ -10,7 +10,7 @@ const swaggerOptions: Options = {
         },
         servers: [
             {
-                url: `http://localhost:${process.env.PORT || 8080}/api`,
+                url: '/api',
             },
         ],
         components: {
