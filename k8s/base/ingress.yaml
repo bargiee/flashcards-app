@@ -4,6 +4,7 @@ metadata:
     name: flashcards-app-ingress
     namespace: flashcards-app
 spec:
+    ingressClassName: nginx
     rules:
         - host: flashcards.local
           http:

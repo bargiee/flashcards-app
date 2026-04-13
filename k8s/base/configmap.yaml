@@ -5,4 +5,4 @@ metadata:
     namespace: flashcards-app
 data:
     PORT: '8080'
-    CORS_ORIGIN: 'http://localhost'
+    CORS_ORIGIN: 'http://flashcards.local'
