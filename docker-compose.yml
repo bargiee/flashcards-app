@@ -23,11 +23,24 @@ services:
         ports:
             - '8080:8080'
         environment:
-            DB_HOST: db
-            DB_PORT: 5432
-            DB_USER: myuser
-            DB_PASSWORD: mypassword
-            DB_NAME: mydatabase
+            DATABASE_URL: postgresql://myuser:mypassword@db:5432/mydatabase
+            RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+        depends_on:
+            db:
+                condition: service_started
+            rabbitmq:
+                condition: service_healthy
+
+    worker:
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+        command: npm run worker:dev
+        volumes:
+            - ./backend:/app
+            - /app/node_modules
+        environment:
+            DATABASE_URL: postgresql://myuser:mypassword@db:5432/mydatabase
             RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
         depends_on:
             db:

@@ -2,12 +2,12 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 const api = axios.create({
-    baseURL: 'http://localhost:8080/api',
+    baseURL: '/api',
     withCredentials: true,
 });
 
 const refreshClient = axios.create({
-    baseURL: 'http://localhost:8080/api',
+    baseURL: '/api',
     withCredentials: true,
 });
 
@@ -42,7 +42,7 @@ api.interceptors.response.use(
         }
 
         return Promise.reject(err);
-    }
+    },
 );
 
 export default api;
