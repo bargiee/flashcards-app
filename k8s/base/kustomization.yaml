@@ -15,3 +15,4 @@ resources:
     - frontend-service.yaml
     - frontend-deployment.yaml
     - ingress.yaml
+    - import-consumer-deployment.yaml
