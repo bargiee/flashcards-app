@@ -40,7 +40,3 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-startImportConsumer().catch((err) => {
-    console.error('Failed to start consumer:', err);
-});
