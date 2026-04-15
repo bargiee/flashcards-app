@@ -1,29 +1,30 @@
 # Remind Flashcards App
 
-A full-stack flashcard learning application allowing users to create, manage, and study custom decks. Containerized with Docker for easy setup and deployment.
+A full-stack flashcard learning application allowing users to create, manage, and study custom decks. The project supports both local development with Docker Compose and containerized deployment on Kubernetes using Minikube.
 
 ---
 
 ## Project Description
 
-Remind is a flashcard-based learning app designed. It is designed for learners who want an efficient and easy way to review and memorize content. The application supports user authentication, deck creation and management, study mode, and learning progress tracking.
+Remind is a flashcard-based learning app designed to review and memorize content. The application supports user authentication, deck creation and management, study mode, and learning progress tracking.
 
 The project is implemented as a containerized full-stack web app:
 
--   **Backend**: RESTful API built with Node.js, Express, PostgreSQL, Prisma, and JWT-based authentication.
--   **Frontend**: Built using React, Vite, and Tailwind CSS. Features include route protection, responsive design, and a simple study interface optimized for usability.
--   **Infrastructure**: Dockerized services orchestrated with Docker Compose. Includes PostgreSQL, RabbitMQ for background processing, and a dedicated worker container for asynchronous tasks.
+- **Backend**: RESTful API built with Node.js, Express, PostgreSQL, Prisma, and JWT-based authentication.
+- **Frontend**: Built using React, Vite, and Tailwind CSS. Features include route protection, responsive design, and a simple study interface.
+- **Infrastructure**: Dockerized services orchestrated with Docker Compose for local development and Kubernetes manifests for local cluster deployment with Minikube. Includes PostgreSQL, RabbitMQ for background processing, and a dedicated worker service for asynchronous tasks.
 
 ---
 
 ## Key Features
 
--   JWT-based authentication using access and refresh tokens
--   Secure user registration, login, logout, and session handling
--   Full CRUD functionality for flashcard decks and individual cards
--   Interactive study mode with real-time progress tracking
--   Background CSV import handled by asynchronous job processing
--   API documentation available through integrated Swagger UI at `/api/docs`
+- JWT-based authentication using access and refresh tokens
+- Secure user registration, login, logout, and session handling
+- Full CRUD functionality for flashcard decks and individual cards
+- Interactive study mode with real-time progress tracking
+- Background CSV import handled by asynchronous job processing
+- Separate development and production-like environments
+- API documentation available through integrated Swagger UI at `/api/docs`
 
 ---
 
@@ -71,13 +72,19 @@ The project is implemented as a containerized full-stack web app:
 
 ### Prerequisites
 
--   [Docker](https://www.docker.com/) & [Docker Compose](https://docs.docker.com/compose/)
--   Free ports: `5173` (frontend), `8080` (backend)
+#### For Docker Compose
 
-### 1. Clone the repository:
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
 
-Open your terminal or command prompt.
-Use Git to clone the project repository to your local machine.
+#### For Kubernetes
+
+- [Minikube](https://minikube.sigs.k8s.io/docs/start/)
+- [Task](https://taskfile.dev/installation/)
+- `kubectl`
+- Hyper-V enabled on Windows
+
+### 1. Clone the repository
 
 ```bash
 git clone github.com/bargiee/flashcards-app.git
@@ -99,7 +106,9 @@ JWT_REFRESH_SECRET="your_refresh_secret"
 JWT_REFRESH_EXPIRES_IN=604800 # 7 days
 ```
 
-### 3. Build and Run the Application
+## Build and run
+
+### Run with Docker Compose
 
 From the root of the project directory:
 
@@ -107,10 +116,16 @@ From the root of the project directory:
 docker compose up -d --build
 ```
 
-Initialize the database using Prisma:
+Initialize Prisma Client:
 
 ```bash
 docker compose exec backend npx prisma generate
+docker compose exec worker npx prisma generate
+```
+
+Apply database migrations:
+
+```bash
 docker compose exec backend npx prisma migrate deploy
 ```
 
@@ -122,22 +137,99 @@ docker compose up -d --build backend
 
 Then access:
 
--   Frontend: [http://localhost:5173](http://localhost:5173)
--   Backend API: [http://localhost:8080/api](http://localhost:8080/api)
--   Swagger UI: [http://localhost:8080/api/docs](http://localhost:8080/api/docs)
--   RabbitMQ Dashboard: [http://localhost:15672](http://localhost:15672) - Login: `guest` / `guest`
+- Frontend: [http://localhost:5173](http://localhost:5173)
+- Backend API: [http://localhost:8080/api](http://localhost:8080/api)
 
 ---
 
+### Run with Kubernetes
+
+The following instructions are intended for a Windows setup with Minikube using the Hyper-V driver.
+
+### Option 1: Run with Taskfile
+
+Start the full Kubernetes setup using the Taskfile:
+
+```bash
+task k8s:up
+```
+
+If needed, run individual tasks separately:
+
+```bash
+task k8s:start
+task k8s:build
+task k8s:deploy
+task k8s:migrate
+```
+
+### Option 2: Run commands step by step
+
+#### 1. Start Minikube
+
+```bash
+minikube config set driver hyperv
+minikube start --driver=hyperv
+minikube addons enable ingress
+```
+
+#### 2. Build application images inside Minikube
+
+```bash
+./k8s/scripts/build-images.sh
+```
+
+#### 3. Deploy Kubernetes manifests
+
+```bash
+./k8s/scripts/deploy-base.sh
+```
+
+#### 4. Run Prisma migrations
+
+```bash
+./k8s/scripts/run-migrations.sh
+```
+
+### Configure local host mapping
+
+To access the application through Kubernetes Ingress, add the ingress IP address to your hosts file.
+This step is required whether you use the Taskfile or run the commands manually.
+
+Get the ingress address:
+
+```bash
+kubectl get ingress -n flashcards-app
+```
+
+Then add the returned IP to your hosts file:
+
+Edit:
+
+```bash
+C:\Windows\System32\drivers\etc\hosts
+```
+
+Add:
+
+```bash
+<INGRESS_IP> flashcards.local
+```
+
+#### Access the application
+
+- Frontend: [http://flashcards.local](http://flashcards.local)
+
 ## Additional Notes
 
--   **API Documentation**
+- **API Documentation**
+    - Generated using Swagger.
+    - Contains complete reference details for endpoints, parameters, request/response bodies, and auth requirements.
+    - Available at:
+        - `http://localhost:8080/api/docs` when running with Docker Compose
+        - `http://flashcards.local/api/docs` when running with Kubernetes
 
-    -   Generated using Swagger (OpenAPI).
-    -   Contains complete reference details for endpoints, parameters, request/response bodies, and auth requirements.
-    -   Accessible at [http://localhost:8080/api/docs](http://localhost:8080/api/docs) while the app is running.
-
--   **RabbitMQ**
-
-    -   Used for handling asynchronous CSV import jobs to prevent API delays.
-    -   Management UI available at [http://localhost:15672](http://localhost:15672) - login using `guest` / `guest`.
+- **RabbitMQ**
+    - Used for handling asynchronous CSV import jobs to prevent API delays.
+    - Login: `guest` / `guest`
+    - Management UI available at `http://localhost:15672` when running with Docker Compose.
