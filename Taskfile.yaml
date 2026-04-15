@@ -1,0 +1,50 @@
+version: '3'
+
+tasks:
+    k8s:start:
+        desc: Start Minikube with Hyper-V and enable ingress
+        cmds:
+            - minikube config set driver hyperv
+            - minikube start --driver=hyperv
+            - minikube addons enable ingress
+
+    k8s:build:
+        desc: Build backend and frontend images inside Minikube
+        cmds:
+            - ./k8s/scripts/build-images.sh
+
+    k8s:deploy:
+        desc: Apply base Kubernetes manifests
+        cmds:
+            - ./k8s/scripts/deploy-base.sh
+
+    k8s:migrate:
+        desc: Run Prisma migration job
+        cmds:
+            - ./k8s/scripts/run-migrations.sh
+
+    k8s:status:
+        desc: Show Kubernetes resources in app namespace
+        cmds:
+            - kubectl get all -n flashcards-app
+            - kubectl get ingress -n flashcards-app
+            - kubectl get pvc -n flashcards-app
+
+    k8s:down:
+        desc: Stop Minikube cluster
+        cmds:
+            - minikube stop
+
+    k8s:delete:
+        desc: Delete Minikube cluster
+        cmds:
+            - minikube delete
+
+    k8s:up:
+        desc: Full Kubernetes setup
+        cmds:
+            - task: k8s:start
+            - task: k8s:build
+            - task: k8s:deploy
+            - task: k8s:migrate
+            - task: k8s:status
